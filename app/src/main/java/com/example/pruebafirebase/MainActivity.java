@@ -11,12 +11,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "SobrenombrePruebaFireba";
     private FirebaseFirestore db;
+
+    public List<Coche> listaCoches=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,47 +30,61 @@ public class MainActivity extends AppCompatActivity {
         // Inicializa Firebase Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Escribir un documento
-        escribirDocumento();
 
-        // Leer un documento
-        leerDocumento();
+        leerBaseDeDatosYAlmacenarEnLista();
+
+        vaciarBaseDeDatosYAgregarDesdeLista();
     }
 
-    private void escribirDocumento() {
-        // Obtén una referencia a la colección
-        CollectionReference collectionRef = db.collection("SobrenombrePruebaFirebase");
+    private void leerBaseDeDatosYAlmacenarEnLista() {
+        CollectionReference cochesCollectionRef = db.collection("SobrenombrePruebaFirebase");
 
-        // Crea un objeto con los datos
-        Map<String, Object> data = new HashMap<>();
-        data.put("nombre", "Ejemplo");
-        data.put("edad", 25);
+        cochesCollectionRef.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    listaCoches.clear(); // Limpiar la lista antes de llenarla con los nuevos datos
 
-        // Añade el documento a la colección
-        collectionRef.add(data)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Documento agregado con ID: " + documentReference.getId());
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        if (documentSnapshot.exists()) {
+                            Coche coche = documentSnapshot.toObject(Coche.class);
+                            if (coche != null) {
+                                listaCoches.add(coche);
+                            }
+                        }
+                    }
+
+                    Log.d(TAG, "Se han leído y almacenado en listaCoches " + listaCoches.size() + " coches.");
                 })
                 .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error al agregar documento", e);
+                    Log.w(TAG, "Error al obtener documentos", e);
                 });
     }
 
-    private void leerDocumento() {
-        // Obtén una referencia al documento que deseas leer
-        DocumentReference docRef = db.collection("usuarios").document("ID_DEL_DOCUMENTO_A_LEER");
+    private void vaciarBaseDeDatosYAgregarDesdeLista() {
+        CollectionReference cochesCollectionRef = db.collection("SobrenombrePruebaFirebase");
 
-        // Leer el documento
-        docRef.get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Log.d(TAG, "Datos del documento: " + documentSnapshot.getData());
-                    } else {
-                        Log.d(TAG, "El documento no existe");
+        // Borrar todos los documentos existentes
+        cochesCollectionRef
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        db.collection("SobrenombrePruebaFirebase").document(document.getId()).delete();
                     }
+
+                    // Agregar los coches desde la lista a la base de datos
+                    for (Coche coche : listaCoches) {
+                        cochesCollectionRef.add(coche)
+                                .addOnSuccessListener(documentReference -> {
+                                    Log.d(TAG, "Documento agregado con ID: " + documentReference.getId());
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w(TAG, "Error al agregar documento", e);
+                                });
+                    }
+
+                    Log.d(TAG, "Base de datos vaciada y lista de coches agregada a la base de datos.");
                 })
                 .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error al obtener documento", e);
+                    Log.w(TAG, "Error al obtener documentos", e);
                 });
     }
 }

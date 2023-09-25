@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "637063202412",
+    "project_id": "taller-e70fc",
+    "storage_bucket": "taller-e70fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637063202412:android:558ec550c8de5f1f237a49",
+        "android_client_info": {
+          "package_name": "com.example.pruebafirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB65D1ECah_mGtIjcFvy5kKwy4c2tJf7e8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

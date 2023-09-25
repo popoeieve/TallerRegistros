@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
@@ -20,39 +21,39 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "SobrenombrePruebaFireba";
     private FirebaseFirestore db;
 
-    public List<Coche> listaCoches=new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //FirebaseApp.initializeApp(this);
         // Inicializa Firebase Firestore
-        db = FirebaseFirestore.getInstance();
 
+        CocheManager listaCoches = CocheManager.getInstance();
+
+        db = FirebaseFirestore.getInstance();
 
         leerBaseDeDatosYAlmacenarEnLista();
 
-        vaciarBaseDeDatosYAgregarDesdeLista();
     }
 
     private void leerBaseDeDatosYAlmacenarEnLista() {
+        CocheManager listaCoches = CocheManager.getInstance();
         CollectionReference cochesCollectionRef = db.collection("SobrenombrePruebaFirebase");
 
         cochesCollectionRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    listaCoches.clear(); // Limpiar la lista antes de llenarla con los nuevos datos
+                    listaCoches.getListaCoches().clear(); // Limpiar la lista antes de llenarla con los nuevos datos
 
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         if (documentSnapshot.exists()) {
                             Coche coche = documentSnapshot.toObject(Coche.class);
                             if (coche != null) {
-                                listaCoches.add(coche);
+                                listaCoches.getListaCoches().add(coche);
                             }
                         }
                     }
 
-                    Log.d(TAG, "Se han leído y almacenado en listaCoches " + listaCoches.size() + " coches.");
+                    Log.d(TAG, "Se han leído y almacenado en listaCoches " + listaCoches.getListaCoches().size() + " coches.");
                 })
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error al obtener documentos", e);
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void vaciarBaseDeDatosYAgregarDesdeLista() {
+        CocheManager listaCoches = CocheManager.getInstance();
         CollectionReference cochesCollectionRef = db.collection("SobrenombrePruebaFirebase");
 
         // Borrar todos los documentos existentes
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Agregar los coches desde la lista a la base de datos
-                    for (Coche coche : listaCoches) {
+                    for (Coche coche : listaCoches.getListaCoches()) {
                         cochesCollectionRef.add(coche)
                                 .addOnSuccessListener(documentReference -> {
                                     Log.d(TAG, "Documento agregado con ID: " + documentReference.getId());
@@ -86,5 +88,23 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.w(TAG, "Error al obtener documentos", e);
                 });
+    }
+
+    private void mostrarListaCoches() {
+        CocheManager listaCoches = CocheManager.getInstance();
+        Log.d(TAG, "Contenido de la lista de coches:");
+        for (Coche coche : listaCoches.getListaCoches()) {
+            Log.d(TAG, "Nombre: " + coche.getNombre() + ", Edad: " + coche.getEdad());
+        }
+    }
+
+    public void AgregarCoche(View vista) {
+        CocheManager listaCoches = CocheManager.getInstance();
+        Log.d(TAG, "Agregando coche...:");
+        Coche nuevoCoche = new Coche("Bibidaiabidubu", 22);
+        Log.d(TAG, "Agregando coche manualmente: "+nuevoCoche.getNombre());
+        listaCoches.agregarCoche(nuevoCoche);
+        mostrarListaCoches();
+        vaciarBaseDeDatosYAgregarDesdeLista();
     }
 }

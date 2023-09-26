@@ -1,10 +1,12 @@
 package com.example.pruebafirebase;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
@@ -25,11 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //FirebaseApp.initializeApp(this);
+
         // Inicializa Firebase Firestore
-
-        CocheManager listaCoches = CocheManager.getInstance();
-
         db = FirebaseFirestore.getInstance();
 
         leerBaseDeDatosYAlmacenarEnLista();
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void leerBaseDeDatosYAlmacenarEnLista() {
         CocheManager listaCoches = CocheManager.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("SobrenombrePruebaFirebase");
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
 
         cochesCollectionRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -91,19 +90,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mostrarListaCoches() {
-        CocheManager listaCoches = CocheManager.getInstance();
-        Log.d(TAG, "Contenido de la lista de coches:");
-        for (Coche coche : listaCoches.getListaCoches()) {
-            Log.d(TAG, "Nombre: " + coche.getNombre() + ", Edad: " + coche.getEdad());
+        CocheManager cocheManager = CocheManager.getInstance();
+        LinearLayout listaCochesLayout = findViewById(R.id.listaCochesLayout);  // Asumiendo que tienes un LinearLayout con el ID listaCochesLayout en tu XML
+
+        // Limpiar cualquier vista previa
+        listaCochesLayout.removeAllViews();
+
+        for (Coche coche : cocheManager.getListaCoches()) {
+            CocheFragmento cocheFragmento = new CocheFragmento();
+
+            // Configurar los argumentos (nombre y edad) para el fragmento
+            Bundle args = new Bundle();
+            args.putString("nombre", coche.getNombre());
+            args.putString("matricula", String.valueOf(coche.getMatricula()));
+            args.putInt("id",coche.hashCode());
+            cocheFragmento.setArguments(args);
+
+            // Agregar el fragmento al contenedor (listaCochesLayout)
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(listaCochesLayout.getId(), cocheFragmento);
+            transaction.commit();
         }
     }
 
     public void AgregarCoche(View vista) {
         CocheManager listaCoches = CocheManager.getInstance();
-        Log.d(TAG, "Agregando coche...:");
-        Coche nuevoCoche = new Coche("Bibidaiabidubu", 22);
-        Log.d(TAG, "Agregando coche manualmente: "+nuevoCoche.getNombre());
-        listaCoches.agregarCoche(nuevoCoche);
+        //Log.d(TAG, "Agregando coche...:");
+        //Coche nuevoCoche = new Coche("Bibidaiabidubu", 22);
+        //Log.d(TAG, "Agregando coche manualmente: "+nuevoCoche.getNombre());
+        //listaCoches.agregarCoche(nuevoCoche);
         mostrarListaCoches();
         vaciarBaseDeDatosYAgregarDesdeLista();
     }

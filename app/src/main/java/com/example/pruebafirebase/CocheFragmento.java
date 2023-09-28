@@ -1,5 +1,6 @@
 package com.example.pruebafirebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -66,7 +67,6 @@ public class CocheFragmento extends Fragment {
         if (args != null) {
             String nombre = args.getString("nombre");
             String matricula = args.getString("matricula");
-            int hashCode=args.getInt("id");
 
             // Asignar los valores a los TextView
             TextView nombreTextView = view.findViewById(R.id.nombre);
@@ -74,7 +74,24 @@ public class CocheFragmento extends Fragment {
 
             nombreTextView.setText(nombre);
             matriculaTextView.setText(matricula);
+
+            // Agregar OnClickListener al fragmento
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Crear un Intent para abrir la nueva Activity (InformeCocheActivity)
+                    Intent intent = new Intent(getActivity(), InformeCocheActivity.class);
+
+                    // Pasar la matricula como un extra en el Intent
+                    intent.putExtra("matricula", matricula);
+
+                    // Iniciar la nueva Activity
+                    startActivity(intent);
+                }
+            });
         }
+
+
 
         return view;
     }

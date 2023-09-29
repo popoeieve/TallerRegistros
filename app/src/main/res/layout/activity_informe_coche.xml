@@ -7,112 +7,237 @@
     android:layout_height="match_parent"
     tools:context=".InformeCocheActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/procesoCocheLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PROCESO COCHE"
-                android:textAlignment="center" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusableInTouchMode="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/procesoCocheLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PROCESO COCHE"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/editTextNombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="nombre"
+                        />
+
+                    <EditText
+                        android:id="@+id/editTextMatricula"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="matricula"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/editTextNombre"
+                <CheckBox
+                    android:id="@+id/checkBoxCompra"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:text="nombre" />
+                    android:layout_weight="1"
+                    android:text="1.COMPRA" />
+
+                <TextView
+                    android:id="@+id/fechaCompraLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FECHA:" />
 
                 <EditText
-                    android:id="@+id/editTextMatricula"
+                    android:id="@+id/editTextFechaCompra"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:inputType="textPersonName"
-                    android:text="matricula" />
+                    />
+
+                <TextView
+                    android:id="@+id/precioCompraLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:text="PRECIO" />
+
+                <EditText
+                    android:id="@+id/editTextPrecio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:inputType="textPersonName"
+                    />
+
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxDiagnosisPREITV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="2.(JCARLOS)DIAGNOSIS PARA PRE-ITV,POST-ITV (MARCA SI SE PUEDE HACER EL PUNTO 10,11,12)" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="2"
+                    android:text="¿ESTAS SEGURO QUE PASA ITV? PUES ELIMINA EL PASO 7 y 8" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fechaMecanicaLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="FECHA INICIO MECANICA:" />
+
+                <EditText
+                    android:id="@+id/editTextFechaInicioMecanica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkBoxPedirRepuestosPreITV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="3. PEDIR RESPUESTOS/PIEZAS PRE-ITV" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxMecanicaPreITV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="4. (SANTI) MECANICA PRE-ITV" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxCitaITV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="5. CITA ITV" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxITV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="6. ITV" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxPiezasPostITV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="7. PEDIR REPUESTOS/PIEZAS POST-ITV" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxMecanicaPostITV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="8. (SANTI) MECANICA POST-ITV" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxChapaPintura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="9. CHAPA Y PINTURA" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxLimpieza"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="10. LIMPIEZA" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxFotosVenta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="11. FOTOS VENTA" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxSubirAnuncios"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="12. SUBIR ANUNCIOS" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxVenta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="13. VENTA" />
+
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/checkBoxCompra"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1.COMPRA" />
-
-            <TextView
-                android:id="@+id/fechaCompraLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FECHA COMPRA:" />
-
-            <EditText
-                android:id="@+id/editTextFechaCompra"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/checkBoxDiagnosisPREITV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="2.(JCARLOS)DIAGNOSIS PARA PRE-ITV,POST-ITV (MARCA SI SE PUEDE HACER EL PUNTO 10,11,12)" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/fechaMecanicaLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FECHA INICIO MECANICA:" />
-
-            <EditText
-                android:id="@+id/editTextTextPersonName4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

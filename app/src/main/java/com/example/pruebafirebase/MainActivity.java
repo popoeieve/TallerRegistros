@@ -3,6 +3,7 @@ package com.example.pruebafirebase;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void AgregarCoche(View vista) {
+    public void MostrarListaCochesTaller(View vista) {
         CocheManager listaCoches = CocheManager.getInstance();
         //Log.d(TAG, "Agregando coche...:");
         //Coche nuevoCoche = new Coche("Bibidaiabidubu", 22);
@@ -121,5 +122,11 @@ public class MainActivity extends AppCompatActivity {
         //listaCoches.agregarCoche(nuevoCoche);
         mostrarListaCoches();
         vaciarBaseDeDatosYAgregarDesdeLista();
+    }
+
+    public void AgregarNuevoCoche(View vista) {
+        Intent intent = new Intent(this, InformeCocheActivity.class);
+
+        startActivity(intent);
     }
 }

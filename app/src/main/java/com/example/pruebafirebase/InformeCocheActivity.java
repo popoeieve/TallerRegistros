@@ -2,11 +2,14 @@ package com.example.pruebafirebase;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,6 +35,27 @@ public class InformeCocheActivity extends AppCompatActivity {
         } else {
             // Manejar caso en el que no hay matrícula
             // ...
+        }
+
+        //Para que si se hace focus fuera de un editText se cierre teclado
+        View mainLayout = findViewById(R.id.mainLayout);
+        mainLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                return false;
+            }
+        });
+
+    }
+
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        View focusedView = getCurrentFocus();
+        if (focusedView != null) {
+            imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
+            focusedView.clearFocus();
         }
     }
 

@@ -76,6 +76,7 @@
                     android:id="@+id/fechaCompraLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
                     android:text="FECHA:" />
 
                 <EditText
@@ -91,6 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
+                    android:textColor="@android:color/black"
                     android:text="PRECIO" />
 
                 <EditText
@@ -127,6 +129,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_weight="2"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
                     android:text="¿ESTAS SEGURO QUE PASA ITV? PUES ELIMINA EL PASO 7 y 8" />
 
             </LinearLayout>
@@ -141,6 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textColor="@android:color/black"
                     android:text="FECHA INICIO MECANICA:" />
 
                 <EditText
@@ -235,6 +240,42 @@
                     android:layout_weight="1"
                     android:text="13. VENTA" />
 
+                <TextView
+                    android:id="@+id/respuestosPreITVLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text="REPUESTOS/PIEZAS/GASTOS COCHE PRE-ITV" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonSalir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="0.1"
+                    android:backgroundTint="#C33838"
+                    android:onClick="volverAMainActivity"
+                    android:text="Salir sin guardar" />
+
+                <Button
+                    android:id="@+id/buttonGuardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#3A983E"
+                    android:onClick="guardarInformacion"
+                    android:text="Guardar" />
             </LinearLayout>
 
         </LinearLayout>

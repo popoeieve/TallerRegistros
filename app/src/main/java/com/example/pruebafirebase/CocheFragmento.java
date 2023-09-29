@@ -1,5 +1,7 @@
 package com.example.pruebafirebase;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,6 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,6 +82,15 @@ public class CocheFragmento extends Fragment {
             nombreTextView.setText(nombre);
             matriculaTextView.setText(matricula);
 
+            // Agregar OnLongClickListener al fragmento
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mostrarConfirmacionEliminar(matricula);
+                    return true;
+                }
+            });
+
             // Agregar OnClickListener al fragmento
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,5 +110,43 @@ public class CocheFragmento extends Fragment {
 
 
         return view;
+    }
+
+    private void mostrarConfirmacionEliminar(final String matricula) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("¿Deseas eliminar este coche?")
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Eliminar el coche de la base de datos
+                        eliminarCoche(matricula);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void eliminarCoche(String matricula) {
+        // Inicializar Firebase Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        // Borrar el coche si ya existe con esa matrícula
+        cochesCollectionRef.whereEqualTo("matricula", matricula)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        if (documentSnapshot.exists()) {
+                            db.collection("TallerCarlos").document(documentSnapshot.getId()).delete();
+                            // Reinicia la actividad
+                            Intent intent = getActivity().getIntent();
+                            getActivity().finish();
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getActivity(), "Error al buscar coche por matrícula: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }

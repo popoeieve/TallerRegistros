@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -93,5 +94,60 @@ public class InformeCocheActivity extends AppCompatActivity {
         matriculaEditText.setText(coche.getMatricula());
         nombreEditText.setText(coche.getNombre());
 
+    }
+
+    public void volverAMainActivity(View view) {
+        finish();  // Cierra esta Activity y vuelve a la MainActivity si es la anterior en la pila
+    }
+
+    public void guardarInformacion(View view) {
+        // Obtener la matrícula y nombre de los EditText
+        EditText editTextMatricula = findViewById(R.id.editTextMatricula);
+        EditText editTextNombre = findViewById(R.id.editTextNombre);
+        String matricula = editTextMatricula.getText().toString().trim();
+        String nombre = editTextNombre.getText().toString().trim();
+
+        // Verificar que haya datos en la matrícula y nombre
+        if (matricula.isEmpty() || nombre.isEmpty()) {
+            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Inicializar Firebase Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        // Borrar el coche si ya existe con esa matrícula
+        cochesCollectionRef.whereEqualTo("matricula", matricula)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        if (documentSnapshot.exists()) {
+                            db.collection("TallerCarlos").document(documentSnapshot.getId()).delete();
+                        }
+                    }
+
+                    // Crear un nuevo coche con los datos
+                    Coche coche = new Coche(matricula, nombre);
+
+                    // Agregar el nuevo coche a la base de datos
+                    cochesCollectionRef.add(coche)
+                            .addOnSuccessListener(documentReference -> {
+                                Toast.makeText(this, "Coche agregado con éxito", Toast.LENGTH_SHORT).show();
+
+                                // Cerrar esta actividad y volver a MainActivity
+                                finish();
+
+                                // Iniciar la MainActivity
+                                Intent intent = new Intent(this, MainActivity.class);
+                                startActivity(intent);
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(this, "Error al agregar coche: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al buscar coche por matrícula: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }

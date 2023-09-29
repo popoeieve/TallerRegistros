@@ -9,6 +9,11 @@ public class Coche {
         // Constructor vacío necesario para Firebase
     }
 
+    public Coche(String matricula, String nombre) {
+        this.nombre = nombre;
+        this.matricula = matricula;
+    }
+
     public Coche(String nombre, String matricula, String fechaCompra, String piezasPreITV, String piezasPostITV, boolean esComprado, boolean esDiagnosisPreITV, boolean pedirRespuestospreITV, boolean pedirRepuestosPostITV, boolean tieneChapaYPintura, boolean tieneMecanicaPostITV, boolean esMecanicaPreITV, boolean tieneCitaITV, boolean haPasadoITV, boolean esLimpiado, boolean tieneFotosVenta, boolean esAnuncioSubido, boolean esVendido, double precioCompra) {
         this.nombre = nombre;
         this.matricula = matricula;

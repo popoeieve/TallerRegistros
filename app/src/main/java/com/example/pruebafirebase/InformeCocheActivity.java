@@ -5,20 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 public class InformeCocheActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String matricula;
+
+    private TableLayout tableLayout;
+    private Button btnAddRow;
+    private ArrayList<String> listaRepuestosPreITV;
 
     private String TAG="InformeCocheActivity";
 
@@ -48,6 +61,123 @@ public class InformeCocheActivity extends AppCompatActivity {
             }
         });
 
+        // Inicializa la lista de repuestos (puedes llenarla con tus datos)
+        listaRepuestosPreITV = new ArrayList<>();
+        listaRepuestosPreITV.add("Tubo de escape muy tuning");
+        listaRepuestosPreITV.add("Maletero de coche");
+        // Agrega más repuestos si es necesario...
+
+        tableLayout = findViewById(R.id.tableLayout);
+        btnAddRow = findViewById(R.id.btnAddRow);
+        btnAddRow.setOnClickListener(view -> agregarFila());
+
+
+        // Llama a este método antes de llenar la tabla
+        crearEncabezadoTabla();
+
+        // Luego llenas la tabla
+        llenarTabla();
+
+    }
+
+    private void crearEncabezadoTabla() {
+        TableRow encabezado = new TableRow(this);
+
+        TextView textViewArticulo = crearCeldaEncabezado("ARTICULO");
+        TextView textViewComprado = crearCeldaEncabezado("COMPRADO");
+        TextView textViewPuesto = crearCeldaEncabezado("PUESTO");
+        TextView textViewPrecio = crearCeldaEncabezado("PRECIO");
+
+        encabezado.addView(textViewArticulo);
+        encabezado.addView(textViewComprado);
+        encabezado.addView(textViewPuesto);
+        encabezado.addView(textViewPrecio);
+
+        tableLayout.addView(encabezado);
+    }
+
+    private TextView crearCeldaEncabezado(String texto) {
+        TextView textView = new TextView(this);
+        textView.setText(texto);
+        textView.setPadding(8, 8, 8, 8);
+        textView.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        textView.setGravity(Gravity.LEFT);
+        textView.setTextColor(getResources().getColor(android.R.color.black)); // Color de texto negro
+
+        return textView;
+    }
+
+    private void llenarTabla() {
+        for (String repuesto : listaRepuestosPreITV) {
+            TableRow row = new TableRow(this);
+            row.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+            // Crear celdas
+            TextView textViewArticulo = crearCelda(repuesto);
+            CheckBox checkBoxComprado = crearCheckBox();
+            CheckBox checkBoxPuesto = crearCheckBox();
+            TextView textViewPrecio = crearCelda("$10");  // Puedes cambiarlo según tus datos
+
+            // Añadir vistas a la fila
+            row.addView(textViewArticulo);
+            row.addView(checkBoxComprado);
+            row.addView(checkBoxPuesto);
+            row.addView(textViewPrecio);
+
+            // Agregar la fila a la tabla
+            tableLayout.addView(row);
+        }
+    }
+
+    private CheckBox crearCheckBox() {
+        CheckBox checkBox = new CheckBox(this);
+
+        // Aplicar propiedades de diseño para centrar horizontal y verticalmente
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+
+        // Aplicar los parámetros de diseño al CheckBox
+        checkBox.setLayoutParams(params);
+
+        return checkBox;
+    }
+
+    private TextView crearCelda(String texto) {
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        textView.setMaxLines(5);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+
+        // Dividir el texto en líneas de máximo 13 caracteres
+        String textoFormateado = formatString(texto, 18);
+        textView.setText(textoFormateado);
+
+        return textView;
+    }
+
+    private String formatString(String text, int maxLengthPerLine) {
+        StringBuilder result = new StringBuilder();
+        int index = 0;
+        while (index < text.length()) {
+            int endIndex = Math.min(index + maxLengthPerLine, text.length());
+            result.append(text.substring(index, endIndex)).append("\n");
+            index += maxLengthPerLine;
+        }
+        return result.toString().trim();
+    }
+
+    private void agregarFila() {
+        // Puedes implementar lógica para añadir una nueva fila a la tabla
+        // Aquí se debería agregar una nueva fila con los datos que necesites
     }
 
 

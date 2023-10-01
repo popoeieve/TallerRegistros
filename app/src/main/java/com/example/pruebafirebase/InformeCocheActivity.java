@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -110,6 +111,11 @@ public class InformeCocheActivity extends AppCompatActivity {
     }
 
     private void llenarTabla() {
+        // Eliminar filas existentes a partir de la segunda
+        int childCount = tableLayout.getChildCount();
+        if (childCount > 1) {  // Asegurar que hay más de una fila
+            tableLayout.removeViews(1, childCount - 1);  // Eliminar filas a partir de la segunda
+        }
         for (String repuesto : listaRepuestosPreITV) {
             TableRow row = new TableRow(this);
             row.setLayoutParams(new TableLayout.LayoutParams(
@@ -117,10 +123,10 @@ public class InformeCocheActivity extends AppCompatActivity {
                     TableLayout.LayoutParams.WRAP_CONTENT));
 
             // Crear celdas
-            TextView textViewArticulo = crearCelda(repuesto);
+            EditText textViewArticulo = crearCelda(repuesto);
             CheckBox checkBoxComprado = crearCheckBox();
             CheckBox checkBoxPuesto = crearCheckBox();
-            TextView textViewPrecio = crearCelda("$10");  // Puedes cambiarlo según tus datos
+            EditText textViewPrecio = crearCelda("$10");  // Puedes cambiarlo según tus datos
 
             // Añadir vistas a la fila
             row.addView(textViewArticulo);
@@ -148,20 +154,22 @@ public class InformeCocheActivity extends AppCompatActivity {
         return checkBox;
     }
 
-    private TextView crearCelda(String texto) {
-        TextView textView = new TextView(this);
-        textView.setLayoutParams(new TableRow.LayoutParams(
+    private EditText crearCelda(String texto) {
+        EditText textoEnCelda = new EditText(this);
+        textoEnCelda.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.WRAP_CONTENT));
-        textView.setMaxLines(5);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setGravity(Gravity.CENTER_VERTICAL);
+        textoEnCelda.setMaxLines(5);
+        textoEnCelda.setEllipsize(TextUtils.TruncateAt.END);
+        textoEnCelda.setGravity(Gravity.CENTER_VERTICAL);
 
         // Dividir el texto en líneas de máximo 13 caracteres
         String textoFormateado = formatString(texto, 18);
-        textView.setText(textoFormateado);
+        float textSizeInSp = 14;
+        textoEnCelda.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp);
+        textoEnCelda.setText(textoFormateado);
 
-        return textView;
+        return textoEnCelda;
     }
 
     private String formatString(String text, int maxLengthPerLine) {
@@ -176,6 +184,8 @@ public class InformeCocheActivity extends AppCompatActivity {
     }
 
     private void agregarFila() {
+        listaRepuestosPreITV.add("");
+        llenarTabla();
         // Puedes implementar lógica para añadir una nueva fila a la tabla
         // Aquí se debería agregar una nueva fila con los datos que necesites
     }
@@ -204,7 +214,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                         if (documentSnapshot.exists()) {
                             Coche coche = documentSnapshot.toObject(Coche.class);
                             if (coche != null) {
-                                // Aquí tienes el objeto Coche correspondiente a la matrícula
+                                // Objeto Coche correspondiente a la matrícula
                                 mostrarDatosCoche(coche);
                             }
                         }

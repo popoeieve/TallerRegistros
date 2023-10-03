@@ -244,11 +244,11 @@ public class InformeCocheActivity extends AppCompatActivity {
         // Obtener la matrícula y nombre de los EditText
         EditText editTextMatricula = findViewById(R.id.editTextMatricula);
         EditText editTextNombre = findViewById(R.id.editTextNombre);
-        String matricula = editTextMatricula.getText().toString().trim();
+        String matriculaNueva = editTextMatricula.getText().toString().trim();
         String nombre = editTextNombre.getText().toString().trim();
 
         // Verificar que haya datos en la matrícula y nombre
-        if (matricula.isEmpty() || nombre.isEmpty()) {
+        if (matriculaNueva.isEmpty() || nombre.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -268,7 +268,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                     }
 
                     // Crear un nuevo coche con los datos
-                    Coche coche = new Coche(matricula, nombre);
+                    Coche coche = new Coche(matriculaNueva, nombre);
 
                     // Agregar el nuevo coche a la base de datos
                     cochesCollectionRef.add(coche)

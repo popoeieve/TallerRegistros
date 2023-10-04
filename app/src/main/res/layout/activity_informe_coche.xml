@@ -246,9 +246,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:text="REPUESTOS/PIEZAS/GASTOS COCHE PRE-ITV"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:text="REPUESTOS/PIEZAS/GASTOS COCHE PRE-ITV" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -276,8 +276,749 @@
                 android:id="@+id/btnAddRow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Añadir Fila"
+                android:text="Añadir Fila a respuestos"
                 android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/respuestosPostITVLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="REPUESTOS/PIEZAS/GASTOS COCHE POST-ITV" />
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TableLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/tableLayoutPostITV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="*">
+
+                </TableLayout>
+
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnAddRowPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Añadir Fila a respuestos"
+                android:layout_gravity="center_horizontal"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:textColor="@android:color/black"
+                    android:text="Marca y modelo" />
+
+                <EditText
+                    android:id="@+id/editTextTextMarcaModelo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:inputType="textPersonName"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="Tipo de motor"
+                    android:textColor="@android:color/black" />
+
+                <EditText
+                    android:id="@+id/editTextTextTipoMotor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:inputType="textPersonName"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:textColor="@android:color/black"
+                    android:text="Año" />
+
+                <EditText
+                    android:id="@+id/editTextAno"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:inputType="textPersonName"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:textColor="@android:color/black"
+                    android:text="Cilindrada" />
+
+                <EditText
+                    android:id="@+id/editTextCilindrada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="textPersonName"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:textColor="@android:color/black"
+                    android:text="Potencia" />
+
+                <EditText
+                    android:id="@+id/editTextPotencia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="textPersonName"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:text="Fecha inspección" />
+
+                <EditText
+                    android:id="@+id/editTextFechaInspeccion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:inputType="textPersonName"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="PUNTOS DE REVISION" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:text="OK" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="OBSERVACIONES" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="1º Golpes/molduras o plásticos" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxGolpes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextGolpes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="2º Pulir faros" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxFaros"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextFaros"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView113"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="3º Partes por pintar" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxPintar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextPintar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView114"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="4º Neumáticos" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxNeumaticos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextNeumaticos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView115"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="5º Revisión de niveles (ARRANCAR COCHE)" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxRevNiveles"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextRevNiveles"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView116"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="6º Mantenimiento aceite/filtros" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxMantenimiento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextMantenimiento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView117"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="7º kit distribución" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxKitDistribucion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextKitDistribucion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView118"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="8º Bloqueo volante" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxBloqVolante"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextBloqVolante"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView119"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="9º Freno de mano" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxFrenoMano"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextFrenoMano"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView120"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="10º Revisión de luces" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxRevLuces"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextRevLuces"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView121"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="11º Cinturones" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxCinturones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextCinturones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView122"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="12º Ventanillas" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxVentanillas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextVentanillas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView123"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="13º Luz avería motor" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxLuzAvMotor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextLuzAvMotor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView124"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="14º Pito" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxPito"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextPito"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView125"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="15º Limpias/Agua limpia" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxLimpias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextLimpias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView126"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="16º Aire acondicionado/clima" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxAireAcondicionado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextAireAcondicionado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView127"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="17º Bajos (Fugas aceite/agua)(SUBIR EN EL ELEVADOR ARRANCADO)" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxBajos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextBajos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView128"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="18º Rotulas/Fuelles (Holguras ruedas)" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxRotulas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextRotulas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView129"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="19º Frenos/Pastillas/Discos" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxFrenos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextFrenos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView130"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="20º Gases/Humo negro(EN EL SUELO)" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxGases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextGases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/textView131"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:text="OTROS" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxOtros"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/editTextOtros"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </TableRow>
+
+            </TableLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

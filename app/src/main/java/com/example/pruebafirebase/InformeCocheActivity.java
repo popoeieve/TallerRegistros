@@ -30,9 +30,10 @@ public class InformeCocheActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String matricula;
 
-    private TableLayout tableLayout;
-    private Button btnAddRow;
+    private TableLayout tableLayout,postITVtabla;
+    private Button btnAddRow,btnAddRowPost;
     private ArrayList<String> listaRepuestosPreITV;
+    private ArrayList<String> listaRepuestosPostITV;
 
     private String TAG="InformeCocheActivity";
 
@@ -66,7 +67,14 @@ public class InformeCocheActivity extends AppCompatActivity {
         listaRepuestosPreITV = new ArrayList<>();
         listaRepuestosPreITV.add("Tubo de escape muy tuning");
         listaRepuestosPreITV.add("Maletero de coche");
-        // Agrega más repuestos si es necesario...
+
+        listaRepuestosPostITV = new ArrayList<>();
+        listaRepuestosPostITV.add("Filtro de aceite");
+        listaRepuestosPostITV.add("Rueda de respuesto");
+
+        postITVtabla=findViewById(R.id.tableLayoutPostITV);
+        btnAddRowPost=findViewById(R.id.btnAddRowPost);
+        btnAddRowPost.setOnClickListener(view -> agregarFilaPostITV());
 
         tableLayout = findViewById(R.id.tableLayout);
         btnAddRow = findViewById(R.id.btnAddRow);
@@ -78,6 +86,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
         // Luego llenas la tabla
         llenarTabla();
+        llenarTablaPostITV();
 
     }
 
@@ -95,6 +104,21 @@ public class InformeCocheActivity extends AppCompatActivity {
         encabezado.addView(textViewPrecio);
 
         tableLayout.addView(encabezado);
+
+        // Crear encabezado para la segunda tabla (postITVtabla)
+        TableRow encabezado2 = new TableRow(this);
+
+        TextView textViewArticulo2 = crearCeldaEncabezado("ARTICULO");
+        TextView textViewComprado2 = crearCeldaEncabezado("COMPRADO");
+        TextView textViewPuesto2 = crearCeldaEncabezado("PUESTO");
+        TextView textViewPrecio2 = crearCeldaEncabezado("PRECIO");
+
+        encabezado2.addView(textViewArticulo2);
+        encabezado2.addView(textViewComprado2);
+        encabezado2.addView(textViewPuesto2);
+        encabezado2.addView(textViewPrecio2);
+
+        postITVtabla.addView(encabezado2);
     }
 
     private TextView crearCeldaEncabezado(String texto) {
@@ -136,6 +160,35 @@ public class InformeCocheActivity extends AppCompatActivity {
 
             // Agregar la fila a la tabla
             tableLayout.addView(row);
+        }
+    }
+
+    private void llenarTablaPostITV() {
+        // Eliminar filas existentes a partir de la segunda
+        int childCount = postITVtabla.getChildCount();
+        if (childCount > 1) {  // Asegurar que hay más de una fila
+            postITVtabla.removeViews(1, childCount - 1);  // Eliminar filas a partir de la segunda
+        }
+        for (String repuesto : listaRepuestosPostITV) {
+            TableRow row = new TableRow(this);
+            row.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+            // Crear celdas
+            EditText textViewArticulo = crearCelda(repuesto);
+            CheckBox checkBoxComprado = crearCheckBox();
+            CheckBox checkBoxPuesto = crearCheckBox();
+            EditText textViewPrecio = crearCelda("$10");  // Puedes cambiarlo según tus datos
+
+            // Añadir vistas a la fila
+            row.addView(textViewArticulo);
+            row.addView(checkBoxComprado);
+            row.addView(checkBoxPuesto);
+            row.addView(textViewPrecio);
+
+            // Agregar la fila a la tabla
+            postITVtabla.addView(row);
         }
     }
 
@@ -186,6 +239,13 @@ public class InformeCocheActivity extends AppCompatActivity {
     private void agregarFila() {
         listaRepuestosPreITV.add("");
         llenarTabla();
+        // Puedes implementar lógica para añadir una nueva fila a la tabla
+        // Aquí se debería agregar una nueva fila con los datos que necesites
+    }
+
+    private void agregarFilaPostITV() {
+        listaRepuestosPostITV.add("");
+        llenarTablaPostITV();
         // Puedes implementar lógica para añadir una nueva fila a la tabla
         // Aquí se debería agregar una nueva fila con los datos que necesites
     }

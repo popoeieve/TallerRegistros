@@ -25,16 +25,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InformeCocheActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String matricula;
-
-    private TableLayout tableLayout,postITVtabla;
-    private Button btnAddRow,btnAddRowPost;
-    private ArrayList<String> listaRepuestosPreITV;
+    private TableLayout tableLayout,postITVtabla,tableLayoutReparaciones;
+    private Button btnAddRow,btnAddRowPost,btnAddRowReparaciones;
+    private ArrayList<List> listaRepuestosPreITV;
     private ArrayList<String> listaRepuestosPostITV;
-
+    private ArrayList<String> listaReparaciones;
     private String TAG="InformeCocheActivity";
 
     @Override
@@ -65,12 +65,22 @@ public class InformeCocheActivity extends AppCompatActivity {
 
         // Inicializa la lista de repuestos (puedes llenarla con tus datos)
         listaRepuestosPreITV = new ArrayList<>();
-        listaRepuestosPreITV.add("Tubo de escape muy tuning");
-        listaRepuestosPreITV.add("Maletero de coche");
+        // Crear la lista a agregar
+        ArrayList<String> listaAgregar = new ArrayList<>();
+        listaAgregar.add("Tubo de escape");
+        listaAgregar.add("true");
+        listaAgregar.add("true");
+        listaAgregar.add("20€");
+        // Agregar la lista al ArrayList principal
+        listaRepuestosPreITV.add(listaAgregar);
 
         listaRepuestosPostITV = new ArrayList<>();
         listaRepuestosPostITV.add("Filtro de aceite");
         listaRepuestosPostITV.add("Rueda de respuesto");
+
+        listaReparaciones=new ArrayList<>();
+        listaReparaciones.add("Rueda reparada");
+        listaReparaciones.add("Cristal reparado");
 
         postITVtabla=findViewById(R.id.tableLayoutPostITV);
         btnAddRowPost=findViewById(R.id.btnAddRowPost);
@@ -80,6 +90,10 @@ public class InformeCocheActivity extends AppCompatActivity {
         btnAddRow = findViewById(R.id.btnAddRow);
         btnAddRow.setOnClickListener(view -> agregarFila());
 
+        tableLayoutReparaciones=findViewById(R.id.tableLayoutReparaciones);
+        btnAddRowReparaciones=findViewById(R.id.buttonAddRowReparaciones);
+        btnAddRowReparaciones.setOnClickListener(view -> agregarFilaReparaciones());
+
 
         // Llama a este método antes de llenar la tabla
         crearEncabezadoTabla();
@@ -87,6 +101,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         // Luego llenas la tabla
         llenarTabla();
         llenarTablaPostITV();
+        llenarTablaReparaciones();
 
     }
 
@@ -119,6 +134,17 @@ public class InformeCocheActivity extends AppCompatActivity {
         encabezado2.addView(textViewPrecio2);
 
         postITVtabla.addView(encabezado2);
+
+        // Crear encabezado para la tercera tabla (tableLayoutReparaciones)
+        TableRow encabezado3 = new TableRow(this);
+
+        TextView textViewReparaciones = crearCeldaEncabezado("REPARACIONES");
+        TextView textViewReparacionesTiempo = crearCeldaEncabezado("TIEMPO");
+
+        encabezado3.addView(textViewReparaciones);
+        encabezado3.addView(textViewReparacionesTiempo);
+
+        tableLayoutReparaciones.addView(encabezado3);
     }
 
     private TextView crearCeldaEncabezado(String texto) {
@@ -140,17 +166,25 @@ public class InformeCocheActivity extends AppCompatActivity {
         if (childCount > 1) {  // Asegurar que hay más de una fila
             tableLayout.removeViews(1, childCount - 1);  // Eliminar filas a partir de la segunda
         }
-        for (String repuesto : listaRepuestosPreITV) {
+        for (List repuesto : listaRepuestosPreITV) {
             TableRow row = new TableRow(this);
             row.setLayoutParams(new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.WRAP_CONTENT));
 
             // Crear celdas
-            EditText textViewArticulo = crearCelda(repuesto);
+            EditText textViewArticulo = crearCelda(repuesto.get(0).toString());
             CheckBox checkBoxComprado = crearCheckBox();
+            if (repuesto.get(1).toString()=="true")
+            {
+                checkBoxComprado.setChecked(true);
+            }
             CheckBox checkBoxPuesto = crearCheckBox();
-            EditText textViewPrecio = crearCelda("$10");  // Puedes cambiarlo según tus datos
+            if (repuesto.get(2).toString()=="true")
+            {
+                checkBoxPuesto.setChecked(true);
+            }
+            EditText textViewPrecio = crearCelda(repuesto.get(3).toString());
 
             // Añadir vistas a la fila
             row.addView(textViewArticulo);
@@ -189,6 +223,31 @@ public class InformeCocheActivity extends AppCompatActivity {
 
             // Agregar la fila a la tabla
             postITVtabla.addView(row);
+        }
+    }
+
+    private void llenarTablaReparaciones() {
+        // Eliminar filas existentes a partir de la segunda
+        int childCount = tableLayoutReparaciones.getChildCount();
+        if (childCount > 1) {  // Asegurar que hay más de una fila
+            tableLayoutReparaciones.removeViews(1, childCount - 1);  // Eliminar filas a partir de la segunda
+        }
+        for (String reparacion : listaReparaciones) {
+            TableRow row = new TableRow(this);
+            row.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+            // Crear celdas
+            EditText editTextReparacion = crearCelda(reparacion);
+            EditText editTextReparacionTiempo = crearCelda("3 horas");
+
+            // Añadir vistas a la fila
+            row.addView(editTextReparacion);
+            row.addView(editTextReparacionTiempo);
+
+            // Agregar la fila a la tabla
+            tableLayoutReparaciones.addView(row);
         }
     }
 
@@ -237,15 +296,70 @@ public class InformeCocheActivity extends AppCompatActivity {
     }
 
     private void agregarFila() {
-        listaRepuestosPreITV.add("");
+        rellenarListaPreITV();
+        ArrayList<String> listaNueva = new ArrayList<>();
+        listaNueva.add("");
+        listaNueva.add("");
+        listaNueva.add("");
+        listaNueva.add("");
+        listaRepuestosPreITV.add(listaNueva);
         llenarTabla();
         // Puedes implementar lógica para añadir una nueva fila a la tabla
         // Aquí se debería agregar una nueva fila con los datos que necesites
     }
 
+    private void rellenarListaPreITV() {
+        listaRepuestosPreITV.clear();
+
+        int rowCount = tableLayout.getChildCount();
+
+        for (int i = 1; i < rowCount; i++) {
+            View view = tableLayout.getChildAt(i);
+
+            if (view instanceof TableRow) {
+                TableRow row = (TableRow) view;
+                int columnCount = row.getChildCount();
+
+                // Crear una lista para almacenar los elementos de esta fila
+                List<String> fila = new ArrayList<>();
+
+                for (int j = 0; j < columnCount; j++) {
+                    View cellView = row.getChildAt(j);
+
+                    if (cellView instanceof EditText) {
+                        EditText editText = (EditText) cellView;
+                        String texto = editText.getText().toString();
+
+                        fila.add(texto);
+                        Log.d(TAG,"se ha añadido a la columna "+j+" el texto "+texto);
+
+                    } else if (cellView instanceof CheckBox) {
+                        CheckBox checkBox = (CheckBox) cellView;
+                        String texto = checkBox.isChecked() ? "true" : "false";
+                        fila.add(texto);
+                    } else if (cellView instanceof TextView) {
+                        TextView textView = (TextView) cellView;
+                        String texto = textView.getText().toString();
+                        fila.add(texto);
+                    }
+                }
+
+                // Agregar la lista de elementos de esta fila al ArrayList principal
+                listaRepuestosPreITV.add(fila);
+            }
+        }
+    }
+
     private void agregarFilaPostITV() {
         listaRepuestosPostITV.add("");
         llenarTablaPostITV();
+        // Puedes implementar lógica para añadir una nueva fila a la tabla
+        // Aquí se debería agregar una nueva fila con los datos que necesites
+    }
+
+    private void agregarFilaReparaciones() {
+        listaReparaciones.add("");
+        llenarTablaReparaciones();
         // Puedes implementar lógica para añadir una nueva fila a la tabla
         // Aquí se debería agregar una nueva fila con los datos que necesites
     }

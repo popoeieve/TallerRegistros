@@ -20,21 +20,29 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import com.google.gson.Gson;
 
 public class InformeCocheActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String matricula;
     private TableLayout tableLayout,postITVtabla,tableLayoutReparaciones;
     private Button btnAddRow,btnAddRowPost,btnAddRowReparaciones;
-    private ArrayList<List> listaRepuestosPreITV;
-    private ArrayList<List> listaRepuestosPostITV;
-    private ArrayList<List> listaReparaciones;
+    private ArrayList<List<String>> listaRepuestosPreITV;
+    private ArrayList<List<String>> listaRepuestosPostITV;
+    private ArrayList<List<String>> listaReparaciones;
     private String TAG="InformeCocheActivity";
 
     @Override
@@ -67,13 +75,6 @@ public class InformeCocheActivity extends AppCompatActivity {
         listaRepuestosPreITV = new ArrayList<>();
         // Crear la lista a agregar
         ArrayList<String> listaAgregarPre = new ArrayList<>();
-        /*listaAgregarPre.add("Tubo de escape");
-        listaAgregarPre.add("true");
-        listaAgregarPre.add("true");
-        listaAgregarPre.add("20€");
-        // Agregar la lista al ArrayList principal
-        listaRepuestosPreITV.add(listaAgregarPre);
-        */
 
 
         listaRepuestosPostITV = new ArrayList<>();
@@ -341,13 +342,18 @@ public class InformeCocheActivity extends AppCompatActivity {
                 // Crear una lista para almacenar los elementos de esta fila
                 List<String> fila = new ArrayList<>();
 
+                Boolean lineaVacia=false;
+
+
                 for (int j = 0; j < columnCount; j++) {
                     View cellView = row.getChildAt(j);
 
                     if (cellView instanceof EditText) {
                         EditText editText = (EditText) cellView;
                         String texto = editText.getText().toString();
-
+                        if(texto.equals("")){
+                            lineaVacia=true;
+                        }
                         fila.add(texto);
                         Log.d(TAG,"se ha añadido a la columna "+j+" el texto "+texto);
 
@@ -363,7 +369,13 @@ public class InformeCocheActivity extends AppCompatActivity {
                 }
 
                 // Agregar la lista de elementos de esta fila al ArrayList principal
-                listaRepuestosPreITV.add(fila);
+                if(!lineaVacia){
+                    listaRepuestosPreITV.add(fila);
+                }else{
+                    View view2 = findViewById(android.R.id.content);
+                    Snackbar.make(view2, "Rellena al menos Repuesto y precio antes de añadir otra fila", Snackbar.LENGTH_SHORT).show();
+                }
+
             }
         }
     }
@@ -394,13 +406,17 @@ public class InformeCocheActivity extends AppCompatActivity {
                 // Crear una lista para almacenar los elementos de esta fila
                 List<String> fila = new ArrayList<>();
 
+                Boolean lineaVacia=false;
+
                 for (int j = 0; j < columnCount; j++) {
                     View cellView = row.getChildAt(j);
 
                     if (cellView instanceof EditText) {
                         EditText editText = (EditText) cellView;
                         String texto = editText.getText().toString();
-
+                        if(texto.equals("")){
+                            lineaVacia=true;
+                        }
                         fila.add(texto);
                         Log.d(TAG,"se ha añadido a la columna "+j+" el texto "+texto);
 
@@ -415,8 +431,13 @@ public class InformeCocheActivity extends AppCompatActivity {
                     }
                 }
 
-                // Agregar la lista de elementos de esta fila al ArrayList principal
-                listaRepuestosPostITV.add(fila);
+                // Agregar la lista de elementos de esta fila al ArrayList principal{
+                if(!lineaVacia){
+                    listaRepuestosPostITV.add(fila);
+                }else{
+                    View view2 = findViewById(android.R.id.content);
+                    Snackbar.make(view2, "Rellena al menos Repuesto y precio antes de añadir otra fila", Snackbar.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -447,13 +468,17 @@ public class InformeCocheActivity extends AppCompatActivity {
                 // Crear una lista para almacenar los elementos de esta fila
                 List<String> fila = new ArrayList<>();
 
+                Boolean lineaVacia=false;
+
                 for (int j = 0; j < columnCount; j++) {
                     View cellView = row.getChildAt(j);
 
                     if (cellView instanceof EditText) {
                         EditText editText = (EditText) cellView;
                         String texto = editText.getText().toString();
-
+                        if(texto.equals("")){
+                            lineaVacia=true;
+                        }
                         fila.add(texto);
                         Log.d(TAG,"se ha añadido a la columna "+j+" el texto "+texto);
 
@@ -469,7 +494,12 @@ public class InformeCocheActivity extends AppCompatActivity {
                 }
 
                 // Agregar la lista de elementos de esta fila al ArrayList principal
-                listaReparaciones.add(fila);
+                if(!lineaVacia){
+                    listaReparaciones.add(fila);
+                }else if(lineaVacia){
+                    View view2 = findViewById(android.R.id.content);
+                    Snackbar.make(view2, "Rellena la reparación y el tiempo antes de añadir otra linea", Snackbar.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -537,41 +567,122 @@ public class InformeCocheActivity extends AppCompatActivity {
             return;
         }
 
-        // Inicializar Firebase Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
 
-        // Borrar el coche si ya existe con esa matrícula
-        cochesCollectionRef.whereEqualTo("matricula", matricula)
+        // Consultar si existe un coche con la matrícula
+        cochesCollectionRef.whereEqualTo("matricula", matriculaNueva)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        if (documentSnapshot.exists()) {
-                            db.collection("TallerCarlos").document(documentSnapshot.getId()).delete();
-                        }
+                    boolean existeCoche = !queryDocumentSnapshots.isEmpty();
+
+                    if (existeCoche) {
+                        // Si existe, actualizar los datos del coche
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        documentSnapshot.getReference().update("nombre", nombre)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(this, "Coche actualizado con éxito", Toast.LENGTH_LONG).show();
+                                    // Cerrar esta actividad y volver a MainActivity
+                                    finish();
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    startActivity(intent);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Error al actualizar coche: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        //Eliminar coche con matricula antigua por si cambio de matricula
+                        //eliminarMatriculaAntigua();
+                        // Si no existe, crear un nuevo coche
+                        Coche coche = new Coche(matriculaNueva, nombre);
+                        cochesCollectionRef.add(coche)
+                                .addOnSuccessListener(documentReference -> {
+
+                                    Toast.makeText(this, "Coche agregado con éxito", Toast.LENGTH_LONG).show();
+                                    // Cerrar esta actividad y volver a MainActivity
+                                    finish();
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    startActivity(intent);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Error al agregar coche: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
                     }
-
-                    // Crear un nuevo coche con los datos
-                    Coche coche = new Coche(matriculaNueva, nombre);
-
-                    // Agregar el nuevo coche a la base de datos
-                    cochesCollectionRef.add(coche)
-                            .addOnSuccessListener(documentReference -> {
-                                Toast.makeText(this, "Coche agregado con éxito", Toast.LENGTH_SHORT).show();
-
-                                // Cerrar esta actividad y volver a MainActivity
-                                finish();
-
-                                // Iniciar la MainActivity
-                                Intent intent = new Intent(this, MainActivity.class);
-                                startActivity(intent);
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(this, "Error al agregar coche: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error al buscar coche por matrícula: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+
+        //sigue por aqui el metodo guardarInformacion
+        rellenarListaPreITV();
+        rellenarListaPostITV();
+        rellenarListaReparaciones();
+
+        //guardarlistaPostITV(matriculaNueva, convertirListaAString(listaRepuestosPostITV));
+        //guardarListaReparaciones(matriculaNueva,convertirListaAString(listaReparaciones));
+        guardarListaPreITV(matriculaNueva,convertirListaAString(listaRepuestosPreITV));
+
     }
+
+    private void guardarListaPreITV(String matricula, String listaPreITVString) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        // Realizar una consulta para buscar el documento con la matrícula específica
+        cochesCollectionRef.whereEqualTo("matricula", matricula)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        // Encontrar el documento que coincide con la matrícula
+                        String documentId = document.getId();
+
+                        // Actualizar el documento con la nueva lista Pre ITV
+                        DocumentReference cocheRef = cochesCollectionRef.document(documentId);
+                        Map<String, Object> updateData = new HashMap<>();
+                        updateData.put("listaPreITV", listaPreITVString);
+
+                        cocheRef.update(updateData)
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "Lista Pre ITV guardada con éxito para la matrícula: " + matricula);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e(TAG, "Error al guardar Lista Pre ITV para la matrícula " + matricula, e);
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error al buscar coche por matrícula: " + e.getMessage(), e);
+                });
+    }
+
+    public String convertirListaAString(ArrayList<List<String>> listaRepuestos) {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(listaRepuestos);
+        Log.d("TAG", "JSON: " + jsonString);  // Esto imprime en la consola las listas guardadas
+        return jsonString;
+    }
+
+    public void eliminarMatriculaAntigua(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        // Consultar si existen coches con la matrícula a eliminar
+        cochesCollectionRef.whereEqualTo("matricula", matricula).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        // Eliminar cada documento encontrado
+                        documentSnapshot.getReference().delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d(TAG, "Coche eliminado con éxito");
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e(TAG, "Error al eliminar coche: " + e.getMessage());
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error al buscar coche por matrícula para eliminar: " + e.getMessage());
+                });
+    }
+
 }

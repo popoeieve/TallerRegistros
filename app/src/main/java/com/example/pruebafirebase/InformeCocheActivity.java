@@ -67,12 +67,14 @@ public class InformeCocheActivity extends AppCompatActivity {
         listaRepuestosPreITV = new ArrayList<>();
         // Crear la lista a agregar
         ArrayList<String> listaAgregarPre = new ArrayList<>();
-        listaAgregarPre.add("Tubo de escape");
+        /*listaAgregarPre.add("Tubo de escape");
         listaAgregarPre.add("true");
         listaAgregarPre.add("true");
         listaAgregarPre.add("20€");
         // Agregar la lista al ArrayList principal
         listaRepuestosPreITV.add(listaAgregarPre);
+        */
+
 
         listaRepuestosPostITV = new ArrayList<>();
         ArrayList<String> listaAgregarPost = new ArrayList<>();

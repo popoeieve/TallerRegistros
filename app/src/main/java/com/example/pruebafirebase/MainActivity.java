@@ -62,14 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void vaciarBaseDeDatosYAgregarDesdeLista() {
         CocheManager listaCoches = CocheManager.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("SobrenombrePruebaFirebase");
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
 
         // Borrar todos los documentos existentes
         cochesCollectionRef
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot document : queryDocumentSnapshots) {
-                        db.collection("SobrenombrePruebaFirebase").document(document.getId()).delete();
+                        db.collection("TallerCarlos").document(document.getId()).delete();
                     }
 
                     // Agregar los coches desde la lista a la base de datos
@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putString("nombre", coche.getNombre());
             args.putString("matricula", String.valueOf(coche.getMatricula()));
-            args.putInt("id",coche.hashCode());
             cocheFragmento.setArguments(args);
 
             // Agregar el fragmento al contenedor (listaCochesLayout)

@@ -565,7 +565,11 @@ public class InformeCocheActivity extends AppCompatActivity {
         if (matriculaNueva.isEmpty() || nombre.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
-        }else{eliminarMatriculaAntigua();}
+        }
+
+        if (!matriculaNueva.equals(matricula)){
+            eliminarMatriculaAntigua();
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
@@ -581,6 +585,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                         DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                         documentSnapshot.getReference().update("nombre", nombre)
                                 .addOnSuccessListener(aVoid -> {
+                                    guardarInformacion();
                                     Toast.makeText(this, "Coche actualizado con éxito", Toast.LENGTH_LONG).show();
                                     // Cerrar esta actividad y volver a MainActivity
                                     finish();
@@ -591,13 +596,11 @@ public class InformeCocheActivity extends AppCompatActivity {
                                     Toast.makeText(this, "Error al actualizar coche: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 });
                     } else {
-                        //Eliminar coche con matricula antigua por si cambio de matricula
-                        //eliminarMatriculaAntigua();
                         // Si no existe, crear un nuevo coche
                         Coche coche = new Coche(matriculaNueva, nombre);
                         cochesCollectionRef.add(coche)
                                 .addOnSuccessListener(documentReference -> {
-
+                                    guardarInformacion();
                                     Toast.makeText(this, "Coche agregado con éxito", Toast.LENGTH_LONG).show();
                                     // Cerrar esta actividad y volver a MainActivity
                                     finish();
@@ -607,6 +610,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(this, "Error al agregar coche: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 });
+
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -614,17 +618,23 @@ public class InformeCocheActivity extends AppCompatActivity {
                 });
 
         //sigue por aqui el metodo guardarInformacion
+
+
+    }
+
+    private void guardarInformacion(){
+        EditText editTextMatricula = findViewById(R.id.editTextMatricula);
+        String matriculaNueva = editTextMatricula.getText().toString().trim();
         rellenarListaPreITV();
         rellenarListaPostITV();
         rellenarListaReparaciones();
 
-        //guardarlistaPostITV(matriculaNueva, convertirListaAString(listaRepuestosPostITV));
-        //guardarListaReparaciones(matriculaNueva,convertirListaAString(listaReparaciones));
-        guardarListaPreITV(matriculaNueva,convertirListaAString(listaRepuestosPreITV));
-
+        guardarLista(matriculaNueva,convertirListaAString(listaRepuestosPostITV),"listaPostITV");
+        guardarLista(matriculaNueva,convertirListaAString(listaReparaciones),"listaReparaciones");
+        guardarLista(matriculaNueva,convertirListaAString(listaRepuestosPreITV),"listaPreITV");
     }
 
-    private void guardarListaPreITV(String matricula, String listaPreITVString) {
+    private void guardarLista(String matricula, String listaPreITVString,String tipoLista) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
 
@@ -639,11 +649,11 @@ public class InformeCocheActivity extends AppCompatActivity {
                         // Actualizar el documento con la nueva lista Pre ITV
                         DocumentReference cocheRef = cochesCollectionRef.document(documentId);
                         Map<String, Object> updateData = new HashMap<>();
-                        updateData.put("listaPreITV", listaPreITVString);
+                        updateData.put(tipoLista, listaPreITVString);
 
                         cocheRef.update(updateData)
                                 .addOnSuccessListener(aVoid -> {
-                                    Log.d(TAG, "Lista Pre ITV guardada con éxito para la matrícula: " + matricula);
+                                    Log.d(TAG, "Lista "+tipoLista+" con éxito para la matrícula: " + matricula);
                                 })
                                 .addOnFailureListener(e -> {
                                     Log.e(TAG, "Error al guardar Lista Pre ITV para la matrícula " + matricula, e);

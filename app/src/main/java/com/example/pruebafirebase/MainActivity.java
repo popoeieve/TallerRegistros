@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         //Log.d(TAG, "Agregando coche manualmente: "+nuevoCoche.getNombre());
         //listaCoches.agregarCoche(nuevoCoche);
         mostrarListaCoches();
-        vaciarBaseDeDatosYAgregarDesdeLista();
+        //vaciarBaseDeDatosYAgregarDesdeLista();
     }
 
     public void AgregarNuevoCoche(View vista) {

@@ -565,7 +565,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         if (matriculaNueva.isEmpty() || nombre.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }else{eliminarMatriculaAntigua();}
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
@@ -653,6 +653,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error al buscar coche por matrícula: " + e.getMessage(), e);
                 });
+
     }
 
     public String convertirListaAString(ArrayList<List<String>> listaRepuestos) {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -76,6 +77,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         // Inicializa la lista de repuestos (puedes llenarla con tus datos)
         listaRepuestosPreITV = new ArrayList<>();
         //lee de la BD y agrega a la lista
+        leerListaPreITV(matricula);
 
 
 
@@ -112,7 +114,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         crearEncabezadoTabla();
 
         // Luego llenas la tabla
-        llenarTabla();
+        ejecutarConRetraso();
         llenarTablaPostITV();
         llenarTablaReparaciones();
 
@@ -171,6 +173,18 @@ public class InformeCocheActivity extends AppCompatActivity {
         textView.setTextColor(getResources().getColor(android.R.color.black)); // Color de texto negro
 
         return textView;
+    }
+
+    private void ejecutarConRetraso() {
+        // Establece un retraso de 2000 milisegundos (2 segundos)
+        int retrasoMilisegundos = 2000;
+
+        // Handler para ejecutar el código después del retraso
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            // Llama al método que deseas ejecutar después del retraso
+            llenarTabla();
+        }, retrasoMilisegundos);
     }
 
     private void llenarTabla() {
@@ -330,7 +344,8 @@ public class InformeCocheActivity extends AppCompatActivity {
     }
 
     private void rellenarListaPreITV() {
-        leerListaPreITV(matricula);
+        listaRepuestosPreITV.clear();
+
         int rowCount = tableLayout.getChildCount();
 
         for (int i = 1; i < rowCount; i++) {

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -73,8 +75,8 @@ public class InformeCocheActivity extends AppCompatActivity {
 
         // Inicializa la lista de repuestos (puedes llenarla con tus datos)
         listaRepuestosPreITV = new ArrayList<>();
-        // Crear la lista a agregar
-        ArrayList<String> listaAgregarPre = new ArrayList<>();
+        //lee de la BD y agrega a la lista
+
 
 
         listaRepuestosPostITV = new ArrayList<>();
@@ -328,8 +330,7 @@ public class InformeCocheActivity extends AppCompatActivity {
     }
 
     private void rellenarListaPreITV() {
-        listaRepuestosPreITV.clear();
-
+        leerListaPreITV(matricula);
         int rowCount = tableLayout.getChildCount();
 
         for (int i = 1; i < rowCount; i++) {
@@ -693,6 +694,41 @@ public class InformeCocheActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error al buscar coche por matrícula para eliminar: " + e.getMessage());
+                });
+    }
+
+    private void leerListaPreITV(String matricula) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        cochesCollectionRef.whereEqualTo("matricula", matricula)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        // Verificamos que exista un documento con la matrícula dada
+                        if (documentSnapshot.exists()) {
+                            String listaPreITVString = documentSnapshot.getString("listaPreITV");
+                            if (listaPreITVString != null) {
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<List<List<String>>>() {}.getType();
+                                listaRepuestosPreITV = gson.fromJson(listaPreITVString, type);
+                                if (listaRepuestosPreITV != null) {
+                                    for (int i = 0; i < listaRepuestosPreITV.size(); i++) {
+                                        List<String> repuestoData = listaRepuestosPreITV.get(i);
+                                        Log.d(TAG, "Repuesto " + i + ": " + repuestoData.toString());
+                                    }
+                                } else {
+                                    Log.d(TAG, "La lista de repuestos Pre ITV está vacía o es nula.");
+                                }
+                            }
+                        } else {
+                            // Si no existe un documento con esa matrícula, mostrar un mensaje
+                            Log.d(TAG, "No se encontró ningún coche con la matrícula: " + matricula);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error al buscar coche por matrícula: " + e.getMessage());
                 });
     }
 

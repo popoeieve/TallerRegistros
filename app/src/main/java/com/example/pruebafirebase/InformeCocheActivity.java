@@ -41,11 +41,9 @@ import com.google.gson.Gson;
 public class InformeCocheActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String matricula;
-    private TableLayout tableLayout,postITVtabla,tableLayoutReparaciones;
+    private TableLayout tableLayout,postITVtabla,tableLayoutReparaciones,tablaRevisiones;
     private Button btnAddRow,btnAddRowPost,btnAddRowReparaciones;
-    private ArrayList<List<String>> listaRepuestosPreITV;
-    private ArrayList<List<String>> listaRepuestosPostITV;
-    private ArrayList<List<String>> listaReparaciones;
+    private ArrayList<List<String>> listaRepuestosPreITV,listaRepuestosPostITV,listaReparaciones,listaRevisiones;
     private String TAG="InformeCocheActivity";
 
     @Override
@@ -74,51 +72,43 @@ public class InformeCocheActivity extends AppCompatActivity {
             }
         });
 
-        // Inicializa la lista de repuestos (puedes llenarla con tus datos)
+        // Inicializa las listas y las llena con los datos de la BD
         listaRepuestosPreITV = new ArrayList<>();
-        //lee de la BD y agrega a la lista
         leerListaPreITV(matricula);
 
-
-
         listaRepuestosPostITV = new ArrayList<>();
-        ArrayList<String> listaAgregarPost = new ArrayList<>();
-        listaAgregarPost.add("Tubo de escape");
-        listaAgregarPost.add("true");
-        listaAgregarPost.add("true");
-        listaAgregarPost.add("20€");
-        // Agregar la lista al ArrayList principal
-        listaRepuestosPostITV.add(listaAgregarPost);
+        leerListaPostITV(matricula);
 
         listaReparaciones=new ArrayList<>();
-        ArrayList<String> listaAgregarReparaciones = new ArrayList<>();
-        listaAgregarReparaciones.add("Tubo de escape");
-        listaAgregarReparaciones.add("3 horas");
-        // Agregar la lista al ArrayList principal
-        listaReparaciones.add(listaAgregarReparaciones);
+        leerListaReparaciones(matricula);
+
+        listaRevisiones=new ArrayList<>();
+        leerListaRevisiones(matricula);
+
+        // Inicializa las tablas y los botones para agregar filas
+        tableLayout = findViewById(R.id.tableLayout);
+        btnAddRow = findViewById(R.id.btnAddRow);
+        btnAddRow.setOnClickListener(view -> agregarFila());
 
         postITVtabla=findViewById(R.id.tableLayoutPostITV);
         btnAddRowPost=findViewById(R.id.btnAddRowPost);
         btnAddRowPost.setOnClickListener(view -> agregarFilaPostITV());
 
-        tableLayout = findViewById(R.id.tableLayout);
-        btnAddRow = findViewById(R.id.btnAddRow);
-        btnAddRow.setOnClickListener(view -> agregarFila());
-
         tableLayoutReparaciones=findViewById(R.id.tableLayoutReparaciones);
         btnAddRowReparaciones=findViewById(R.id.buttonAddRowReparaciones);
         btnAddRowReparaciones.setOnClickListener(view -> agregarFilaReparaciones());
 
+        tablaRevisiones=findViewById(R.id.tablaRevision);
 
-        // Llama a este método antes de llenar la tabla
+
+        // Llama a este método antes de llenar la tabla para crear lso encabezados
         crearEncabezadoTabla();
 
-        // Luego llenas la tabla
+        // Se llenan las tablas dando dos segundos para la conexión
         ejecutarConRetraso();
-        llenarTablaPostITV();
-        llenarTablaReparaciones();
 
     }
+
 
     private void crearEncabezadoTabla() {
         TableRow encabezado = new TableRow(this);
@@ -184,6 +174,9 @@ public class InformeCocheActivity extends AppCompatActivity {
         handler.postDelayed(() -> {
             // Llama al método que deseas ejecutar después del retraso
             llenarTabla();
+            llenarTablaPostITV();
+            llenarTablaReparaciones();
+            //llenarTablaRevisiones();
         }, retrasoMilisegundos);
     }
 
@@ -520,7 +513,6 @@ public class InformeCocheActivity extends AppCompatActivity {
         }
     }
 
-
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         View focusedView = getCurrentFocus();
@@ -570,6 +562,45 @@ public class InformeCocheActivity extends AppCompatActivity {
         finish();  // Cierra esta Activity y vuelve a la MainActivity si es la anterior en la pila
     }
 
+    //Método que lee la tabla de revisiones y la guarda como String en la BD
+    private void guardarTablaRevisiones(String matricula) {
+        System.out.println("----------La tabla revisiones tiene "+tablaRevisiones.getChildCount()+" filas");
+        listaRevisiones.clear();
+        for (int i = 1; i < tablaRevisiones.getChildCount(); i++) {
+            TableRow row = (TableRow) tablaRevisiones.getChildAt(i);
+            View segundoElemento = row.getChildAt(1);
+            String segundoString;
+
+            // Obtener los valores de cada fila
+            String primerString = ((TextView) row.getChildAt(0)).getText().toString();
+
+            // Modificar para almacenar booleanos como true/false en lugar de representación de CheckBox
+            if (segundoElemento instanceof CheckBox) {
+                boolean isChecked = ((CheckBox) segundoElemento).isChecked();
+                segundoString = String.valueOf(isChecked);
+            } else {
+                segundoString = ((TextView) segundoElemento).getText().toString();
+            }
+
+            String tercerString = ((TextView) row.getChildAt(2)).getText().toString();
+
+            // Crear una lista para almacenar los valores
+            List<String> revision = new ArrayList<>();
+            revision.add(primerString);
+            revision.add(segundoString);
+            revision.add(tercerString);
+
+            // Agregar la lista a la lista de revisiones
+            listaRevisiones.add(revision);
+        }
+
+        // Convertir la lista a un String
+        String listaComoString = convertirListaAString(listaRevisiones);
+
+        // Guardar la lista en Firebase
+        guardarLista(matricula, listaComoString, "listaRevisiones");
+    }
+
     public void guardarInformacion(View view) {
         // Obtener la matrícula y nombre de los EditText
         EditText editTextMatricula = findViewById(R.id.editTextMatricula);
@@ -579,7 +610,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
         // Verificar que haya datos en la matrícula y nombre
         if (matriculaNueva.isEmpty() || nombre.isEmpty()) {
-            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Por favor, complete al menos nombre y matricula", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -632,10 +663,6 @@ public class InformeCocheActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error al buscar coche por matrícula: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
-
-        //sigue por aqui el metodo guardarInformacion
-
-
     }
 
     private void guardarInformacion(){
@@ -645,12 +672,15 @@ public class InformeCocheActivity extends AppCompatActivity {
         rellenarListaPostITV();
         rellenarListaReparaciones();
 
+
         guardarLista(matriculaNueva,convertirListaAString(listaRepuestosPostITV),"listaPostITV");
         guardarLista(matriculaNueva,convertirListaAString(listaReparaciones),"listaReparaciones");
         guardarLista(matriculaNueva,convertirListaAString(listaRepuestosPreITV),"listaPreITV");
+        guardarTablaRevisiones(matriculaNueva);
     }
 
-    private void guardarLista(String matricula, String listaPreITVString,String tipoLista) {
+    //Método que guarda la lista en la base de datos bajo la matrícula y con el nombre de campo recibido
+    private void guardarLista(String matricula, String lista,String tipoLista) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
 
@@ -662,10 +692,10 @@ public class InformeCocheActivity extends AppCompatActivity {
                         // Encontrar el documento que coincide con la matrícula
                         String documentId = document.getId();
 
-                        // Actualizar el documento con la nueva lista Pre ITV
+                        // Actualizar el documento con la nueva lista
                         DocumentReference cocheRef = cochesCollectionRef.document(documentId);
                         Map<String, Object> updateData = new HashMap<>();
-                        updateData.put(tipoLista, listaPreITVString);
+                        updateData.put(tipoLista, lista);
 
                         cocheRef.update(updateData)
                                 .addOnSuccessListener(aVoid -> {
@@ -684,6 +714,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
     public String convertirListaAString(ArrayList<List<String>> listaRepuestos) {
         Gson gson = new Gson();
+        Log.d("TAG", "Lista de revisiones antes de la conversión a JSON: " + listaRepuestos);
         String jsonString = gson.toJson(listaRepuestos);
         Log.d("TAG", "JSON: " + jsonString);  // Esto imprime en la consola las listas guardadas
         return jsonString;
@@ -745,6 +776,137 @@ public class InformeCocheActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error al buscar coche por matrícula: " + e.getMessage());
                 });
+    }
+
+    private void leerListaPostITV(String matricula) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        cochesCollectionRef.whereEqualTo("matricula", matricula)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        // Verificamos que exista un documento con la matrícula dada
+                        if (documentSnapshot.exists()) {
+                            String listaPostITVString = documentSnapshot.getString("listaPostITV");
+                            if (listaPostITVString != null) {
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<List<List<String>>>() {}.getType();
+                                listaRepuestosPostITV = gson.fromJson(listaPostITVString, type);
+                                if (listaRepuestosPostITV != null) {
+                                    for (int i = 0; i < listaRepuestosPostITV.size(); i++) {
+                                        List<String> repuestoData = listaRepuestosPostITV.get(i);
+                                        Log.d(TAG, "Repuesto " + i + ": " + repuestoData.toString());
+                                    }
+                                } else {
+                                    Log.d(TAG, "La lista de repuestos Post ITV está vacía o es nula.");
+                                }
+                            }
+                        } else {
+                            // Si no existe un documento con esa matrícula, mostrar un mensaje
+                            Log.d(TAG, "No se encontró ningún coche con la matrícula: " + matricula);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error al buscar coche por matrícula: " + e.getMessage());
+                });
+    }
+
+    private void leerListaReparaciones(String matricula) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        cochesCollectionRef.whereEqualTo("matricula", matricula)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        // Verificamos que exista un documento con la matrícula dada
+                        if (documentSnapshot.exists()) {
+                            String listaPostITVString = documentSnapshot.getString("listaReparaciones");
+                            if (listaPostITVString != null) {
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<List<List<String>>>() {}.getType();
+                                listaReparaciones = gson.fromJson(listaPostITVString, type);
+                                if (listaReparaciones != null) {
+                                    for (int i = 0; i < listaReparaciones.size(); i++) {
+                                        List<String> repuestoData = listaReparaciones.get(i);
+                                        Log.d(TAG, "Reparacion " + i + ": " + repuestoData.toString());
+                                    }
+                                } else {
+                                    Log.d(TAG, "La lista de reparaciones está vacía o es nula.");
+                                }
+                            }
+                        } else {
+                            // Si no existe un documento con esa matrícula, mostrar un mensaje
+                            Log.d(TAG, "No se encontró ningún coche con la matrícula: " + matricula);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error al buscar coche por matrícula: " + e.getMessage());
+                });
+    }
+
+    private void leerListaRevisiones(String matricula) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+
+        cochesCollectionRef.whereEqualTo("matricula", matricula)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        if (documentSnapshot.exists()) {
+                            if (documentSnapshot.contains("listaRevisiones")) {
+                                // El campo listaRevisiones existe en el documento
+                                String listaRevisionesString = documentSnapshot.getString("listaRevisiones");
+                                //Si existe el campo lo carga en la lista
+                                if (listaRevisionesString != null) {
+                                    // Convertir JSON a ArrayList<List<String>>
+                                    Gson gson = new Gson();
+                                    Type type = new TypeToken<ArrayList<ArrayList<String>>>() {}.getType();
+                                    listaRevisiones = gson.fromJson(listaRevisionesString, type);
+
+                                    int retrasoMilisegundos = 2000;
+
+                                    // Handler para ejecutar el código después del retraso
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(() -> {
+                                        // Llama al método que deseas ejecutar después del retraso
+                                        rellenarRevisiones();
+                                    }, retrasoMilisegundos);
+                                    // Llamar al método para vaciar y llenar la tabla
+
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "No se encontró ningún coche con la matrícula: " + matricula);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error al buscar coche por matrícula: " + e.getMessage());
+                });
+    }
+    //Sigue aqui
+    private void rellenarRevisiones() {
+        int childCount = tablaRevisiones.getChildCount();
+
+        // Comenzamos desde 1 para evitar borrar la primera fila (encabezados)
+        for (int i = 1; i < childCount; i++) {
+            TableRow row = (TableRow) tablaRevisiones.getChildAt(i);
+
+            // Actualizar los valores en la fila
+            View segundoElemento = row.getChildAt(1);
+            if (segundoElemento instanceof CheckBox) {
+                ((CheckBox) segundoElemento).setChecked(Boolean.parseBoolean(listaRevisiones.get(i - 1).get(1)));
+            }
+
+            View tercerElemento = row.getChildAt(2);
+            if (tercerElemento instanceof EditText) {
+                ((EditText) tercerElemento).setText(listaRevisiones.get(i - 1).get(2));
+            }
+        }
     }
 
 }

@@ -7,7 +7,7 @@
     android:layout_marginTop="5dp"
     android:layout_marginEnd="5dp"
     android:layout_marginBottom="2.5dp"
-    android:background="#BCB9B9"
+    android:background="#1ABC9C"
     tools:context=".CocheFragmento">
 
     <LinearLayout
@@ -20,10 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="18dp"
             android:textAlignment="center" />
 
         <TextView
             android:id="@+id/matricula"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"

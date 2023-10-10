@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fondo"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -26,6 +27,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="#1ABC9C"
                     android:onClick="MostrarListaCochesTaller"
                     android:text="Lista de coches del taller" />
 
@@ -42,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Agregar coche"
+                android:backgroundTint="#1ABC9C"
                 android:onClick="AgregarNuevoCoche"/>
         </LinearLayout>
 

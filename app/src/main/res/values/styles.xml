@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Color de la ActionBar -->
+        <item name="colorPrimary">@color/titulo</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+        <!-- Otros estilos y propiedades -->
+    </style>
+
+    <style name="MyActionBarTitleText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">"#DD000000"</item> <!-- Color del texto -->
+        <item name="android:textSize">20sp</item> <!-- Tamaño del texto -->
+        <item name="android:gravity">center</item> <!-- Para centrar el texto -->
+        <!--<item name="android:fontFamily">@font/my_custom_font</item> Fuente personalizada -->
+    </style>
+</resources>

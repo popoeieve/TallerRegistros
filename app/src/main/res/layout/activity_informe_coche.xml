@@ -5,6 +5,7 @@
     android:id="@+id/m"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fondo"
     tools:context=".InformeCocheActivity">
 
     <ScrollView
@@ -279,6 +280,7 @@
                 android:id="@+id/btnAddRow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#1ABC9C"
                 android:text="Añadir Fila a respuestos"
                 android:layout_gravity="center_horizontal"/>
 
@@ -315,6 +317,7 @@
             <Button
                 android:id="@+id/btnAddRowPost"
                 android:layout_width="wrap_content"
+                android:backgroundTint="#1ABC9C"
                 android:layout_height="wrap_content"
                 android:text="Añadir Fila a respuestos"
                 android:layout_gravity="center_horizontal"/>
@@ -1048,6 +1051,7 @@
                 android:id="@+id/buttonAddRowReparaciones"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#1ABC9C"
                 android:layout_gravity="center_horizontal"
                 android:text="AÑADIR FILA A REPARACIONES"
                 />

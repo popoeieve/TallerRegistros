@@ -1,5 +1,6 @@
 package com.example.pruebafirebase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -21,6 +22,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,6 +33,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.lang.reflect.Type;
@@ -41,6 +47,8 @@ import com.google.gson.Gson;
 public class InformeCocheActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String matricula;
+    private EditText fechaCompra,precio,marcaModelo,tipoMotor,ano,cilindrada,potencia,fechaInspeccion;
+    private CheckBox compra,diagnosis,pedirRepuestosPre,mecanicaPre,citaITV,ITV,pedirRespuestosPost,mecanicaPost,chapaPintura,limpieza,fotosVenta,subirAnuncio,venta;
     private TableLayout tableLayout,postITVtabla,tableLayoutReparaciones,tablaRevisiones;
     private Button btnAddRow,btnAddRowPost,btnAddRowReparaciones;
     private ArrayList<List<String>> listaRepuestosPreITV,listaRepuestosPostITV,listaReparaciones,listaRevisiones;
@@ -72,6 +80,9 @@ public class InformeCocheActivity extends AppCompatActivity {
             }
         });
 
+        //Método que lee los campos sueltos y checkbox no contenidos en listas ni tablas
+        obtenerDatosDesdeFirebase(matricula);
+
         // Inicializa las listas y las llena con los datos de la BD
         listaRepuestosPreITV = new ArrayList<>();
         leerListaPreITV(matricula);
@@ -100,6 +111,27 @@ public class InformeCocheActivity extends AppCompatActivity {
 
         tablaRevisiones=findViewById(R.id.tablaRevision);
 
+        fechaCompra=findViewById(R.id.editTextFechaCompra);
+        precio=findViewById(R.id.editTextPrecio);
+        marcaModelo=findViewById(R.id.editTextTextMarcaModelo);
+        tipoMotor=findViewById(R.id.editTextTextTipoMotor);
+        ano=findViewById(R.id.editTextAno);
+        cilindrada=findViewById(R.id.editTextCilindrada);
+        potencia=findViewById(R.id.editTextPotencia);
+        fechaInspeccion=findViewById(R.id.editTextFechaInspeccion);
+        compra=findViewById(R.id.checkBoxCompra);
+        diagnosis=findViewById(R.id.checkBoxDiagnosisPREITV);
+        pedirRepuestosPre=findViewById(R.id.checkBoxPedirRepuestosPreITV);
+        mecanicaPre=findViewById(R.id.checkBoxMecanicaPreITV);
+        citaITV=findViewById(R.id.checkBoxCitaITV);
+        ITV=findViewById(R.id.checkBoxITV);
+        pedirRespuestosPost=findViewById(R.id.checkBoxPiezasPostITV);
+        mecanicaPost=findViewById(R.id.checkBoxMecanicaPostITV);
+        chapaPintura=findViewById(R.id.checkBoxChapaPintura);
+        limpieza=findViewById(R.id.checkBoxLimpieza);
+        fotosVenta=findViewById(R.id.checkBoxFotosVenta);
+        subirAnuncio=findViewById(R.id.checkBoxSubirAnuncios);
+        venta=findViewById(R.id.checkBoxVenta);
 
         // Llama a este método antes de llenar la tabla para crear lso encabezados
         crearEncabezadoTabla();
@@ -631,6 +663,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                         // Si existe, actualizar los datos del coche
                         DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                         documentSnapshot.getReference().update("nombre", nombre)
+                                //
                                 .addOnSuccessListener(aVoid -> {
                                     guardarInformacion();
                                     Toast.makeText(this, "Coche actualizado con éxito", Toast.LENGTH_LONG).show();
@@ -677,6 +710,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         guardarLista(matriculaNueva,convertirListaAString(listaReparaciones),"listaReparaciones");
         guardarLista(matriculaNueva,convertirListaAString(listaRepuestosPreITV),"listaPreITV");
         guardarTablaRevisiones(matriculaNueva);
+        actualizadorCheckEdit(matriculaNueva);
     }
 
     //Método que guarda la lista en la base de datos bajo la matrícula y con el nombre de campo recibido
@@ -907,6 +941,120 @@ public class InformeCocheActivity extends AppCompatActivity {
                 ((EditText) tercerElemento).setText(listaRevisiones.get(i - 1).get(2));
             }
         }
+    }
+
+    //Método que guarda los editText y checkBox en la BD
+    private void actualizadorCheckEdit(String matricula){
+        // Obtener la instancia de Firebase Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Crear un mapa para almacenar los datos que deseas actualizar
+        Map<String, Object> datosAActualizar = new HashMap<>();
+        datosAActualizar.put("fechaCompra", fechaCompra.getText().toString());
+        datosAActualizar.put("precio", precio.getText().toString());
+        datosAActualizar.put("marcaModelo", marcaModelo.getText().toString());
+        datosAActualizar.put("tipoMotor", tipoMotor.getText().toString());
+        datosAActualizar.put("ano", ano.getText().toString());
+        datosAActualizar.put("cilindrada", cilindrada.getText().toString());
+        datosAActualizar.put("potencia", potencia.getText().toString());
+        datosAActualizar.put("fechaInspeccion", fechaInspeccion.getText().toString());
+        datosAActualizar.put("compra", compra.isChecked());
+        datosAActualizar.put("diagnosis", diagnosis.isChecked());
+        datosAActualizar.put("pedirRepuestosPre", pedirRepuestosPre.isChecked());
+        datosAActualizar.put("mecanicaPre", mecanicaPre.isChecked());
+        datosAActualizar.put("citaITV", citaITV.isChecked());
+        datosAActualizar.put("ITV", ITV.isChecked());
+        datosAActualizar.put("pedirRespuestosPost", pedirRespuestosPost.isChecked());
+        datosAActualizar.put("mecanicaPost", mecanicaPost.isChecked());
+        datosAActualizar.put("chapaPintura", chapaPintura.isChecked());
+        datosAActualizar.put("limpieza", limpieza.isChecked());
+        datosAActualizar.put("fotosVenta", fotosVenta.isChecked());
+        datosAActualizar.put("subirAnuncio", subirAnuncio.isChecked());
+        datosAActualizar.put("venta", venta.isChecked());
+
+
+        // Buscar el documento con la matrícula dada
+        db.collection("TallerCarlos")
+                .whereEqualTo("matricula", matricula)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Encontrar el documento con la matrícula dada
+                            String documentId = document.getId();
+
+                            // Actualizar los datos en el documento
+                            db.collection("TallerCarlos").document(documentId)
+                                    .update(datosAActualizar)
+                                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Datos actualizados exitosamente en la base de datos"))
+                                    .addOnFailureListener(e -> Log.w(TAG, "Error al actualizar datos", e));
+                        }
+                    } else {
+                        Log.d(TAG, "Error obteniendo documentos: ", task.getException());
+                    }
+                });
+    }
+
+    //Método que lee datos de firebase para checkbox y editText
+    private void obtenerDatosDesdeFirebase(String matricula) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("TallerCarlos")
+                .whereEqualTo("matricula", matricula)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Obtener los datos del documento
+                            Map<String, Object> datos = document.getData();
+
+                            // Verificar si el campo existe y asignar los datos a los EditText y CheckBox correspondientes
+                            fechaCompra.setText(obtenerValorCampo(datos, "fechaCompra"));
+                            precio.setText(obtenerValorCampo(datos, "precio"));
+                            marcaModelo.setText(obtenerValorCampo(datos, "marcaModelo"));
+                            tipoMotor.setText(obtenerValorCampo(datos, "tipoMotor"));
+                            ano.setText(obtenerValorCampo(datos, "ano"));
+                            cilindrada.setText(obtenerValorCampo(datos, "cilindrada"));
+                            potencia.setText(obtenerValorCampo(datos, "potencia"));
+                            fechaInspeccion.setText(obtenerValorCampo(datos, "fechaInspeccion"));
+
+                            // Asignar a los CheckBox
+                            compra.setChecked(obtenerValorBooleanoCampo(datos, "compra"));
+                            diagnosis.setChecked(obtenerValorBooleanoCampo(datos, "diagnosis"));
+                            pedirRepuestosPre.setChecked(obtenerValorBooleanoCampo(datos, "pedirRepuestosPre"));
+                            mecanicaPre.setChecked(obtenerValorBooleanoCampo(datos, "mecanicaPre"));
+                            citaITV.setChecked(obtenerValorBooleanoCampo(datos, "citaITV"));
+                            ITV.setChecked(obtenerValorBooleanoCampo(datos, "ITV"));
+                            pedirRespuestosPost.setChecked(obtenerValorBooleanoCampo(datos, "pedirRespuestosPost"));
+                            mecanicaPost.setChecked(obtenerValorBooleanoCampo(datos, "mecanicaPost"));
+                            chapaPintura.setChecked(obtenerValorBooleanoCampo(datos, "chapaPintura"));
+                            limpieza.setChecked(obtenerValorBooleanoCampo(datos, "limpieza"));
+                            fotosVenta.setChecked(obtenerValorBooleanoCampo(datos, "fotosVenta"));
+                            subirAnuncio.setChecked(obtenerValorBooleanoCampo(datos, "subirAnuncio"));
+                            venta.setChecked(obtenerValorBooleanoCampo(datos, "venta"));
+
+                        }
+                    } else {
+                        Log.d(TAG, "Error obteniendo documentos: ", task.getException());
+                    }
+                });
+    }
+
+    private String obtenerValorCampo(Map<String, Object> datos, String campo) {
+        if (datos.containsKey(campo)) {
+            return datos.get(campo).toString();
+        }
+        return "";
+    }
+
+    private boolean obtenerValorBooleanoCampo(Map<String, Object> datos, String campo) {
+        if (datos.containsKey(campo)) {
+            Object valor = datos.get(campo);
+            if (valor instanceof Boolean) {
+                return (boolean) valor;
+            }
+        }
+        return false;
     }
 
 }

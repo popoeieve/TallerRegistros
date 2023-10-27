@@ -519,7 +519,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
                     if (cellView instanceof EditText) {
                         EditText editText = (EditText) cellView;
-                        String texto = editText.getText().toString();
+                        String texto = editText.getText().toString().replaceAll("\n", "");
                         if(texto.equals("")){
                             lineaVacia=true;
                         }
@@ -532,7 +532,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                         fila.add(texto);
                     } else if (cellView instanceof TextView) {
                         TextView textView = (TextView) cellView;
-                        String texto = textView.getText().toString();
+                        String texto = textView.getText().toString().replaceAll("\n", "");
                         fila.add(texto);
                     }
                 }

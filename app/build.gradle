@@ -11,8 +11,8 @@ android {
         applicationId "com.example.pruebafirebase"
         minSdk 21
         targetSdk 33
-        versionCode 3 // Incrementa este número en cada nueva versión
-        versionName "1.3" // Este es el número visible para los usuarios
+        versionCode 4 // Incrementa este número en cada nueva versión
+        versionName "1.4" // Este es el número visible para los usuarios
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

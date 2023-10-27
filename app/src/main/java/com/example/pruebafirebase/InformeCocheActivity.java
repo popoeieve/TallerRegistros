@@ -213,6 +213,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         }, retrasoMilisegundos);
     }
 
+    //Método que reconstruye la tabla repuestosPreITV fila a fila según la listaRepuestosPreITV
     private void llenarTabla() {
         // Eliminar filas existentes a partir de la segunda
         int childCount = tableLayout.getChildCount();
@@ -228,13 +229,11 @@ public class InformeCocheActivity extends AppCompatActivity {
             // Crear celdas
             EditText textViewArticulo = crearCelda(repuesto.get(0).toString());
             CheckBox checkBoxComprado = crearCheckBox();
-            if (repuesto.get(1).toString()=="true")
-            {
+            if (Boolean.parseBoolean(repuesto.get(1).toString())) {
                 checkBoxComprado.setChecked(true);
             }
             CheckBox checkBoxPuesto = crearCheckBox();
-            if (repuesto.get(2).toString()=="true")
-            {
+            if (Boolean.parseBoolean(repuesto.get(2).toString())) {
                 checkBoxPuesto.setChecked(true);
             }
             EditText textViewPrecio = crearCelda(repuesto.get(3).toString());
@@ -250,6 +249,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         }
     }
 
+    //Método que reconstruye la tabla repuestosPostITV fila a fila según la listaRepuestosPostITV
     private void llenarTablaPostITV() {
         // Eliminar filas existentes a partir de la segunda
         int childCount = postITVtabla.getChildCount();
@@ -265,13 +265,11 @@ public class InformeCocheActivity extends AppCompatActivity {
             // Crear celdas
             EditText textViewArticulo = crearCelda(repuesto.get(0).toString());
             CheckBox checkBoxComprado = crearCheckBox();
-            if (repuesto.get(1).toString()=="true")
-            {
+            if (Boolean.parseBoolean(repuesto.get(1).toString())) {
                 checkBoxComprado.setChecked(true);
             }
             CheckBox checkBoxPuesto = crearCheckBox();
-            if (repuesto.get(2).toString()=="true")
-            {
+            if (Boolean.parseBoolean(repuesto.get(2).toString())) {
                 checkBoxPuesto.setChecked(true);
             }
             EditText textViewPrecio = crearCelda(repuesto.get(3).toString());
@@ -287,6 +285,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         }
     }
 
+    //Método que reconstruye la tabla reparaciones fila a fila según la listaReparaciones
     private void llenarTablaReparaciones() {
         // Eliminar filas existentes a partir de la segunda
         int childCount = tableLayoutReparaciones.getChildCount();
@@ -369,6 +368,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         // Aquí se debería agregar una nueva fila con los datos que necesites
     }
 
+    //Método que actualiza la tabla de repuestosPreITV eliminando su lista y leyendo de lo que hay escrito en ella
     private void rellenarListaPreITV() {
         listaRepuestosPreITV.clear();
 
@@ -433,6 +433,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         llenarTablaPostITV();
     }
 
+    //Método que actualiza la tabla de repuestosPostITV eliminando su lista y leyendo de lo que hay escrito en ella
     private void rellenarListaPostITV(){
         listaRepuestosPostITV.clear();
 
@@ -495,6 +496,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         // Aquí se debería agregar una nueva fila con los datos que necesites
     }
 
+    //Método que actualiza la tabla de reparaciones eliminando su lista y leyendo de lo que hay escrito en ella
     private void rellenarListaReparaciones(){
         listaReparaciones.clear();
 
@@ -778,6 +780,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                 });
     }
 
+    //Método que rellena la listaRepuestosPreITV con la información de la base de datos
     private void leerListaPreITV(String matricula) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference cochesCollectionRef = db.collection("TallerCarlos");

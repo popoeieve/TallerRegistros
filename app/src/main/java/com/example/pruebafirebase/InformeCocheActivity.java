@@ -47,7 +47,7 @@ import com.google.gson.Gson;
 public class InformeCocheActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String matricula;
-    private EditText fechaCompra,precio,marcaModelo,tipoMotor,ano,cilindrada,potencia,fechaInspeccion,fechaInicioMecanica;
+    private EditText fechaCompra,precio,marcaModelo,tipoMotor,ano,cilindrada,potencia,fechaInspeccion,fechaInicioMecanica,precioVenta;
     private CheckBox compra,diagnosis,pedirRepuestosPre,mecanicaPre,citaITV,ITV,pedirRespuestosPost,mecanicaPost,chapaPintura,limpieza,fotosVenta,subirAnuncio,venta;
     private TableLayout tableLayout,postITVtabla,tableLayoutReparaciones,tablaRevisiones;
     private Button btnAddRow,btnAddRowPost,btnAddRowReparaciones;
@@ -117,6 +117,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         tipoMotor=findViewById(R.id.editTextTextTipoMotor);
         ano=findViewById(R.id.editTextAno);
         fechaInicioMecanica=findViewById(R.id.editTextFechaInicioMecanica);
+        precioVenta=findViewById(R.id.editTextPrecioVenta);
         cilindrada=findViewById(R.id.editTextCilindrada);
         potencia=findViewById(R.id.editTextPotencia);
         fechaInspeccion=findViewById(R.id.editTextFechaInspeccion);
@@ -963,6 +964,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         datosAActualizar.put("cilindrada", cilindrada.getText().toString());
         datosAActualizar.put("potencia", potencia.getText().toString());
         datosAActualizar.put("fechaInspeccion", fechaInspeccion.getText().toString());
+        datosAActualizar.put("precioVenta", precioVenta.getText().toString());
         datosAActualizar.put("compra", compra.isChecked());
         datosAActualizar.put("diagnosis", diagnosis.isChecked());
         datosAActualizar.put("pedirRepuestosPre", pedirRepuestosPre.isChecked());
@@ -1022,6 +1024,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                             cilindrada.setText(obtenerValorCampo(datos, "cilindrada"));
                             potencia.setText(obtenerValorCampo(datos, "potencia"));
                             fechaInspeccion.setText(obtenerValorCampo(datos, "fechaInspeccion"));
+                            precioVenta.setText(obtenerValorCampo(datos, "precioVenta"));
                             fechaInicioMecanica.setText(obtenerValorCampo(datos, "fechaInicioMecanica"));
 
                             // Asignar a los CheckBox

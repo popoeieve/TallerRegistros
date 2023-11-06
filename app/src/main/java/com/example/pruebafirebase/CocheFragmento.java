@@ -106,9 +106,6 @@ public class CocheFragmento extends Fragment {
                 }
             });
         }
-
-
-
         return view;
     }
 

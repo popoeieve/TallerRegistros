@@ -237,12 +237,36 @@
                     android:layout_weight="1"
                     android:text="12. SUBIR ANUNCIOS" />
 
-                <CheckBox
-                    android:id="@+id/checkBoxVenta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="13. VENTA" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="0dp">
+
+                    <CheckBox
+                        android:id="@+id/checkBoxVenta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="13. VENTA" />
+
+                    <TextView
+                        android:id="@+id/precioVentaLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="0dp"
+                        android:textColor="@android:color/black"
+                        android:text="PRECIO VENTA:" />
+
+                    <EditText
+                        android:id="@+id/editTextPrecioVenta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="Precio de venta"
+                        />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/respuestosPreITVLabel"

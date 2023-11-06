@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "SobrenombrePruebaFireba";
+    private finanzas finanzaFragment; // Variable para realizar un seguimiento del fragmento
     private FirebaseFirestore db;
 
     @Override
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void mostrarListaCoches() {
         CocheManager cocheManager = CocheManager.getInstance();
-        LinearLayout listaCochesLayout = findViewById(R.id.listaCochesLayout);  // Asumiendo que tienes un LinearLayout con el ID listaCochesLayout en tu XML
+        LinearLayout listaCochesLayout = findViewById(R.id.listaCochesLayout);
 
         // Limpiar cualquier vista previa
         listaCochesLayout.removeAllViews();
@@ -127,5 +128,24 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InformeCocheActivity.class);
 
         startActivity(intent);
+    }
+
+    public void mostrarFinanzas(View vista) {
+        LinearLayout listaTallerLayout = findViewById(R.id.listaTallerLayout);
+
+        // Comprueba si el fragmento ya está presente
+        if (finanzaFragment != null) {
+            // Si ya está presente, elimínalo
+            getSupportFragmentManager().beginTransaction()
+                    .remove(finanzaFragment)
+                    .commit();
+            finanzaFragment = null; // Establece la variable del fragmento en null
+        } else {
+            // Si no está presente, crea un nuevo fragmento y agrégalo
+            finanzaFragment = new finanzas();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(listaTallerLayout.getId(), finanzaFragment);
+            transaction.commit();
+        }
     }
 }

@@ -35,6 +35,7 @@
         </ScrollView>
 
         <LinearLayout
+            android:id="@+id/listaTallerLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -46,6 +47,14 @@
                 android:text="Agregar coche"
                 android:backgroundTint="#1ABC9C"
                 android:onClick="AgregarNuevoCoche"/>
+
+            <Button
+                android:id="@+id/mostrarFinanzasBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mostrar finanzas"
+                android:backgroundTint="#1ABC9C"
+                android:onClick="mostrarFinanzas"/>
         </LinearLayout>
 
     </LinearLayout>

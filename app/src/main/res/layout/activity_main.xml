@@ -15,47 +15,54 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <LinearLayout
-                android:id="@+id/listaCochesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/button"
+                <LinearLayout
+                    android:id="@+id/listaCochesLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="#1ABC9C"
-                    android:onClick="MostrarListaCochesTaller"
-                    android:text="Lista de coches del taller" />
+                    android:orientation="vertical">
 
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/garage2"
+                        android:backgroundTint="#1ABC9C"
+                        android:onClick="MostrarListaCochesTaller"
+                        android:text="Lista de coches del taller" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/listaTallerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Agregar coche"
+                        android:drawableEnd="@drawable/newcar2"
+                        android:backgroundTint="#1ABC9C"
+                        android:onClick="AgregarNuevoCoche"/>
+
+                    <Button
+                        android:id="@+id/mostrarFinanzasBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mostrar finanzas"
+                        android:drawableEnd="@drawable/icondinero2"
+                        android:backgroundTint="#1ABC9C"
+
+                        android:onClick="mostrarFinanzas"/>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/listaTallerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Agregar coche"
-                android:backgroundTint="#1ABC9C"
-                android:onClick="AgregarNuevoCoche"/>
-
-            <Button
-                android:id="@+id/mostrarFinanzasBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mostrar finanzas"
-                android:backgroundTint="#1ABC9C"
-                android:onClick="mostrarFinanzas"/>
-        </LinearLayout>
 
     </LinearLayout>
 

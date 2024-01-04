@@ -126,7 +126,7 @@ public class CocheFragmento extends Fragment {
     private void eliminarCoche(String matricula) {
         // Inicializar Firebase Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase hay 4 referencias
 
         // Borrar el coche si ya existe con esa matrícula
         cochesCollectionRef.whereEqualTo("matricula", matricula)
@@ -134,7 +134,7 @@ public class CocheFragmento extends Fragment {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                         if (documentSnapshot.exists()) {
-                            db.collection("TallerCarlos").document(documentSnapshot.getId()).delete();
+                            db.collection("Taller").document(documentSnapshot.getId()).delete();//Es taller y el nombre del primo Camelcase
                             // Reinicia la actividad
                             Intent intent = getActivity().getIntent();
                             getActivity().finish();

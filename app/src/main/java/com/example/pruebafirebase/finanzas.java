@@ -70,7 +70,7 @@ public class finanzas extends Fragment {
 
         // Realizar la consulta a la base de datos de Firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference tallerCarlosCollection = db.collection("TallerCarlos");
+        CollectionReference tallerCarlosCollection = db.collection("Taller");//Es taller y el nombre del primo Camelcase 4 refeere
 
         tallerCarlosCollection
                 .whereEqualTo("venta", false) // Filtrar coches con venta = false

@@ -562,7 +562,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         // Inicializa Firebase Firestore
         db = FirebaseFirestore.getInstance();
 
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         // Buscar el coche por la matrícula
         cochesCollectionRef.whereEqualTo("matricula", matricula)
@@ -655,7 +655,7 @@ public class InformeCocheActivity extends AppCompatActivity {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         // Consultar si existe un coche con la matrícula
         cochesCollectionRef.whereEqualTo("matricula", matriculaNueva)
@@ -720,7 +720,7 @@ public class InformeCocheActivity extends AppCompatActivity {
     //Método que guarda la lista en la base de datos bajo la matrícula y con el nombre de campo recibido
     private void guardarLista(String matricula, String lista,String tipoLista) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         // Realizar una consulta para buscar el documento con la matrícula específica
         cochesCollectionRef.whereEqualTo("matricula", matricula)
@@ -760,7 +760,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
     public void eliminarMatriculaAntigua(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         // Consultar si existen coches con la matrícula a eliminar
         cochesCollectionRef.whereEqualTo("matricula", matricula).get()
@@ -784,7 +784,7 @@ public class InformeCocheActivity extends AppCompatActivity {
     //Método que rellena la listaRepuestosPreITV con la información de la base de datos
     private void leerListaPreITV(String matricula) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         cochesCollectionRef.whereEqualTo("matricula", matricula)
                 .get()
@@ -819,7 +819,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
     private void leerListaPostITV(String matricula) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         cochesCollectionRef.whereEqualTo("matricula", matricula)
                 .get()
@@ -854,7 +854,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
     private void leerListaReparaciones(String matricula) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         cochesCollectionRef.whereEqualTo("matricula", matricula)
                 .get()
@@ -889,7 +889,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
     private void leerListaRevisiones(String matricula) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         cochesCollectionRef.whereEqualTo("matricula", matricula)
                 .get()
@@ -981,7 +981,7 @@ public class InformeCocheActivity extends AppCompatActivity {
 
 
         // Buscar el documento con la matrícula dada
-        db.collection("TallerCarlos")
+        db.collection("Taller")//Es taller y el nombre del primo Camelcase
                 .whereEqualTo("matricula", matricula)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -991,7 +991,7 @@ public class InformeCocheActivity extends AppCompatActivity {
                             String documentId = document.getId();
 
                             // Actualizar los datos en el documento
-                            db.collection("TallerCarlos").document(documentId)
+                            db.collection("Taller").document(documentId)//Es taller y el nombre del primo Camelcase
                                     .update(datosAActualizar)
                                     .addOnSuccessListener(aVoid -> Log.d(TAG, "Datos actualizados exitosamente en la base de datos"))
                                     .addOnFailureListener(e -> Log.w(TAG, "Error al actualizar datos", e));
@@ -1006,7 +1006,7 @@ public class InformeCocheActivity extends AppCompatActivity {
     private void obtenerDatosDesdeFirebase(String matricula) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("TallerCarlos")
+        db.collection("Taller")//Es taller y el nombre del primo Camelcase
                 .whereEqualTo("matricula", matricula)
                 .get()
                 .addOnCompleteListener(task -> {

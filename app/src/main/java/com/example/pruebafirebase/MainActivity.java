@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void leerBaseDeDatosYAlmacenarEnLista() {
         CocheManager listaCoches = CocheManager.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         cochesCollectionRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -63,14 +63,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void vaciarBaseDeDatosYAgregarDesdeLista() {
         CocheManager listaCoches = CocheManager.getInstance();
-        CollectionReference cochesCollectionRef = db.collection("TallerCarlos");
+        CollectionReference cochesCollectionRef = db.collection("Taller");//Es taller y el nombre del primo Camelcase
 
         // Borrar todos los documentos existentes
         cochesCollectionRef
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot document : queryDocumentSnapshots) {
-                        db.collection("TallerCarlos").document(document.getId()).delete();
+                        db.collection("Taller").document(document.getId()).delete();//Es taller y el nombre del primo Camelcase
                     }
 
                     // Agregar los coches desde la lista a la base de datos
